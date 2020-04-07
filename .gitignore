@@ -44,3 +44,9 @@ gradle-app.setting
 .classpath
 .project
 .vscode/
+
+# Eclipse 2020
+.settings/
+
+# Extra gitignores
+**/.gitignore
