@@ -1,15 +1,15 @@
 package com.dumbdogdiner.betterwhitelist_bungee.discord.commands;
 
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.lib.Command;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.utils.RoleUtil;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Objects;
 
-public class UnwhitelistCommand extends Command {
+public class UnwhitelistCommand extends Command implements BaseClass {
 
     public UnwhitelistCommand() {
         this.name = "unwhitelist";
@@ -39,7 +39,7 @@ public class UnwhitelistCommand extends Command {
             return;
         }
 
-        if (SQL.removeEntry(target.getId())) {
+        if (getSQL().removeEntry(target.getId())) {
             e.getChannel().sendMessage(
                     ":white_check_mark: User `" + target.getUser().getAsTag() + "` was removed from the whitelist.")
                     .queue(message -> RoleUtil.removeGrantedRole(e));

@@ -1,7 +1,7 @@
 package com.dumbdogdiner.betterwhitelist_bungee.bungee.commands;
 
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -9,7 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-public class WhoisCommand extends Command {
+public class WhoisCommand extends Command implements BaseClass {
 
     public WhoisCommand() {
         super("btw_whois", "betterwhitelist.read.whois");
@@ -33,10 +33,10 @@ public class WhoisCommand extends Command {
                 || target.matches("[a-zA-Z0-9_]{1,16}")) {
             player = BetterWhitelistBungee.getInstance().getProxy().getPlayer(target);
         } else {
-            playerUuid = SQL.getUuidFromDiscordId(target);
+            playerUuid = getSQL().getUuidFromDiscordId(target);
             if (playerUuid != null) {
                 player = BetterWhitelistBungee.getInstance().getProxy().getPlayer(playerUuid);
-                discordId = SQL.getDiscordIDFromMinecraft(playerUuid);
+                discordId = getSQL().getDiscordIDFromMinecraft(playerUuid);
             }
         }
 

@@ -1,36 +1,39 @@
 package com.dumbdogdiner.betterwhitelist_bungee.utils;
 
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+import com.google.common.io.ByteStreams;
 
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-public class PluginConfig {
+public class PluginConfig implements BaseClass {
 
-    private PluginConfig() { }
-
-
-    private static Configuration config;
+    public PluginConfig() {
+    	loadConfig();
+    }
+    
+    private Configuration config;
 
     /**
      * Fetch and cache the configuration file for the plugin.
      */
-    public static Configuration getConfig() {
-        if (config != null) {
-            return config;
-        }
-        return loadConfig();
+    public Configuration getConfig() {
+    	return config;
     }
 
     /**
      * Return the prefix used by the Discord bot.
      * @return
      */
-    public static String getPrefix() {
+    public String getPrefix() {
         String prefix = getConfig().getString("discord.prefix");
         return prefix == null ? "-" : prefix;
     }
@@ -38,8 +41,8 @@ public class PluginConfig {
      * Save the current cached config to disk.
      * @return
      */
-    public static boolean saveConfig() {
-        BetterWhitelistBungee.getInstance().getLogger().info("Saving configuration to disk...");
+    public boolean saveConfig() {
+        getLogger().info("Saving configuration to disk...");
         return writeConfig(config);
     }
 
@@ -47,7 +50,7 @@ public class PluginConfig {
      * Write the provided configuration to 'config.yml'.
      * @param configuration
      */
-    private static boolean writeConfig(Configuration configuration) {
+    private boolean writeConfig(Configuration configuration) {
         File file =  new File(BetterWhitelistBungee.getInstance().getDataFolder(), "config.yml");
 
         try {
@@ -64,42 +67,37 @@ public class PluginConfig {
     }
 
     /**
-     * Use the internal 'config.yml' file as configuration.
-     * @return
+     * Fetch the 'config.yml' stored in the plugin data folder, and set it to the private 'config' variable.
      */
-    private static Configuration useDefaultConfig() {
-        Configuration configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(BetterWhitelistBungee.getInstance().getResourceAsStream("config.yml"));
-        return config = configuration;
+    private void loadConfig() {
+    	
+		try {
+			config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(loadResource("config.yml"));
+		} catch (IOException e) {
+			getLogger().severe("Error loading config.yml");
+		}
     }
-
+    
     /**
-     * Fetch the 'config.yml' stored in the plugin data folder.
-     * @return
-     *
-     * TODO: Optimize this - repeats itself too much.
+     * Load a resource from the plugin's folder, creating it if it does not already exist.
+     * @param resource Filename to load.
      */
-    private static Configuration loadConfig() {
-
-        BetterWhitelistBungee plugin = BetterWhitelistBungee.getInstance();
-        File file = new File(plugin.getDataFolder(), "config.yml");
-
-        if (!file.exists()) {
-            plugin.getLogger().warning("Plugin configuration 'config.yml' does not exist - using defaults...");
-            Configuration defaultConfig = useDefaultConfig();
-
-            writeConfig(defaultConfig);
-            return defaultConfig;
+    private File loadResource(String resource) {
+            File folder = this.getDataFolder();
+            if (!folder.exists())
+                folder.mkdir();
+            File resourceFile = new File(folder, resource);
+            try {
+                if (!resourceFile.exists()) {
+                    resourceFile.createNewFile();
+                    try (InputStream in = this.getResourceAsStream(resource);
+                         OutputStream out = new FileOutputStream(resourceFile)) {
+                        ByteStreams.copy(in, out);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resourceFile;
         }
-
-        try {
-            Configuration savedConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
-            config = savedConfig;
-            plugin.getLogger().info("Loaded configuration.");
-            return config;
-        } catch(IOException err) {
-            plugin.getLogger().warning("Failed to load 'config.yml' - falling back to internal resources.");
-            err.printStackTrace();
-            return config = useDefaultConfig();
-        }
-    }
 }

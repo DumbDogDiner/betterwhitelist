@@ -1,5 +1,6 @@
 package com.dumbdogdiner.betterwhitelist_bungee.discord.utils;
 
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
 
@@ -7,24 +8,33 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class RoleUtil {
+public class RoleUtil implements BaseClass {
+	
+	/**
+	 * Get an instance of this class, which contains BaseClass.
+	 * (static functions can't access interfaces)
+	 */
+	private static RoleUtil getBase() {
+		return new RoleUtil();
+	}
+	
     /**
      * Check if a requiredRole is needed.
      * @param e
      * @return
      */
     public static boolean checkRequiredRole(MessageReceivedEvent e) {
-        if (!PluginConfig.getConfig().getBoolean("discord.roles.requiredRole.enabled")) {
+        if (!getBase().getConfig().getBoolean("discord.roles.requiredRole.enabled")) {
             return true;
         }
 
-        String roleId = PluginConfig.getConfig().getString("discord.roles.requiredRole.roleId");
+        String roleId = getBase().getConfig().getString("discord.roles.requiredRole.roleId");
         Role role = e.getGuild().getRoleById(roleId);
         Member member = e.getMember();
 
         // Prevent whitelisting just in case.
         if (role == null || member == null) {
-            WhitelistBot.getLogger().warning("[discord] Unable to retrieve requiredRole '" + roleId + "'.");
+            getBase().getLogger().warning("[discord] Unable to retrieve requiredRole '" + roleId + "'.");
             return false;
         }
 
@@ -36,15 +46,15 @@ public class RoleUtil {
      * @param e
      */
     public static void addGrantedRole(MessageReceivedEvent e) {
-        if (PluginConfig.getConfig().getBoolean("discord.roles.grantedRole.enabled")) {
+        if (getBase().getConfig().getBoolean("discord.roles.grantedRole.enabled")) {
             try {
-                String roleId = PluginConfig.getConfig().getString("discord.roles.grantedRole.roleId");
+                String roleId = getBase().getConfig().getString("discord.roles.grantedRole.roleId");
                 Role role = e.getGuild().getRoleById(roleId);
                 Member member = e.getMember();
 
                 // If the role doesn't exist, inform the user that something went wrong.
                 if (role == null || member == null) {
-                    WhitelistBot.getLogger().warning("[discord] Unable to retrieve grantedRole '" + roleId + "'.");
+                	getBase().getLogger().warning("[discord] Unable to retrieve grantedRole '" + roleId + "'.");
                     sendRoleAddErrorMessage(e);
                     return;
                 }
@@ -58,7 +68,7 @@ public class RoleUtil {
                 e.getGuild().addRoleToMember(member, role).queue();
 
                 // Tell users they have been granted the role.
-                if (!PluginConfig.getConfig().getBoolean("discord.roles.grantedRole.silent")) {
+                if (!getBase().getConfig().getBoolean("discord.roles.grantedRole.silent")) {
                     e.getChannel().sendMessage(":inbox_tray: You were also granted the **" + role.getName() + "** role!").queue();
                 }
             } catch(Exception err) {
@@ -84,15 +94,15 @@ public class RoleUtil {
      * @param e
      */
     public static void removeGrantedRole(MessageReceivedEvent e) {
-        if (PluginConfig.getConfig().getBoolean("discord.roles.grantedRole.enabled")) {
+        if (getBase().getConfig().getBoolean("discord.roles.grantedRole.enabled")) {
             try {
-                String roleId = PluginConfig.getConfig().getString("discord.roles.grantedRole.roleId");
+                String roleId = getBase().getConfig().getString("discord.roles.grantedRole.roleId");
                 Role role = e.getGuild().getRoleById(roleId);
                 Member member = e.getMember();
 
                 // If the role doesn't exist, inform the user that something went wrong.
                 if (role == null || member == null) {
-                    WhitelistBot.getLogger().warning("[discord] Unable to retrieve grantedRole '" + roleId + "'.");
+                	getBase().getLogger().warning("[discord] Unable to retrieve grantedRole '" + roleId + "'.");
                     return;
                 }
 

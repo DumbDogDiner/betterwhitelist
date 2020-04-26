@@ -1,6 +1,6 @@
 package com.dumbdogdiner.betterwhitelist_bungee.discord;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.commands.GetStatusCommand;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.commands.HelpCommand;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.commands.UnwhitelistCommand;
@@ -9,8 +9,6 @@ import com.dumbdogdiner.betterwhitelist_bungee.discord.lib.Command;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.GuildEventListener;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.MessageListener;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.ReadyListener;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
-
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -21,50 +19,24 @@ import javax.security.auth.login.LoginException;
 
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * Discord bot for whitelisting users from DDD itself.
  */
-public class WhitelistBot {
+public class WhitelistBot implements BaseClass {
+	
+	private JDA jda;
 
-    private static WhitelistBot instance;
-    public static WhitelistBot getInstance() {
-        if (instance == null) {
-            instance = new WhitelistBot();
-        }
-        return instance;
-    }
-
-    private WhitelistBot() { }
-
-    private static JDA jda = null;
-    public static JDA getJda() {
-        return jda;
-    }
-
-    private static HashMap<String, Command> commands = new HashMap<>();
-    public static HashMap<String, Command> getCommands() {
-        return commands;
-    }
-
-    public static Logger getLogger() {
-        return BetterWhitelistBungee.getInstance().getLogger();
-    }
-
-    /**
-     * Initialize the bot.
-     */
-    public void init() {
-        JDABuilder builder = new JDABuilder(AccountType.BOT)
-            .setToken(PluginConfig.getConfig().getString("discord.token"));
-
-        configureMemory(builder);
+    public WhitelistBot() {
+    	// constructor
+    	JDABuilder builder = new JDABuilder(AccountType.BOT).setToken(getConfig().getString("discord.token"));
+    	
+    	configureMemory(builder);
 
         // Register Events
         builder.addEventListeners(
-            new ReadyListener(),
+        	new ReadyListener(),
             new GuildEventListener(),
             new MessageListener()
         );
@@ -84,7 +56,6 @@ public class WhitelistBot {
         ));
 
         builder.setActivity(Activity.watching("the cutest fuzzballs \uD83E\uDDE1"));
-
         try {
             getLogger().info("[discord] Attempting connection to Discord...");
             jda = builder.build();
@@ -93,13 +64,22 @@ public class WhitelistBot {
             err.printStackTrace();
         }
     }
+    
+    public JDA getJDA() {
+    	return jda;
+    }
+
+    private HashMap<String, Command> commands = new HashMap<>();
+    public HashMap<String, Command> getCommands() {
+        return commands;
+    }
 
     /**
      * Configure flags for the JDABuilder. Saves memory :3
      * @param builder
      */
 
-    private static void configureMemory(JDABuilder builder) {
+    private void configureMemory(JDABuilder builder) {
         builder.setDisabledCacheFlags(
                 EnumSet.of(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.EMOTE)
         );
@@ -109,7 +89,7 @@ public class WhitelistBot {
      * Add commands to the bot.
      * @param commandsToAdd
      */
-    public static void addCommand(Command... commandsToAdd) {
+    public void addCommand(Command... commandsToAdd) {
         for (Command cmd : commandsToAdd) {
             commands.put(cmd.getName(), cmd);
         }

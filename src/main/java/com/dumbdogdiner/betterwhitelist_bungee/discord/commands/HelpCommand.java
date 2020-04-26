@@ -1,14 +1,14 @@
 package com.dumbdogdiner.betterwhitelist_bungee.discord.commands;
 
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.lib.Command;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.stream.Collectors;
 
-public class HelpCommand extends Command {
+public class HelpCommand extends Command implements BaseClass {
 
     public HelpCommand() {
         this.name = "help";
@@ -20,7 +20,7 @@ public class HelpCommand extends Command {
         e.getChannel().sendMessage(String.format(
                 "**Aarrff!!** BetterWhitelist `v%s`\n\nAvailable Commands:\n - %s",
                 BetterWhitelistBungee.getInstance().getDescription().getVersion(),
-                WhitelistBot.getCommands().values().stream().map(this::formatCommandInfo).collect(Collectors.joining("\n - "))
+                getBot().getCommands().values().stream().map(this::formatCommandInfo).collect(Collectors.joining("\n - "))
         )).queue();
     }
 

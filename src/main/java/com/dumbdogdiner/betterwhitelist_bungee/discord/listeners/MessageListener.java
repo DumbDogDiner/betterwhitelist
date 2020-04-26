@@ -1,8 +1,6 @@
 package com.dumbdogdiner.betterwhitelist_bungee.discord.listeners;
 
-import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
-
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -12,18 +10,18 @@ import java.util.Arrays;
 /**
  * Listens for new messages.
  */
-public class MessageListener extends ListenerAdapter {
+public class MessageListener extends ListenerAdapter implements BaseClass {
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
         String rawContent = e.getMessage().getContentRaw();
-        String prefix = PluginConfig.getConfig().getString("discord.prefix");
-        String guildId = PluginConfig.getConfig().getString("discord.guildId");
+        String prefix = getConfig().getString("discord.prefix");
+        String guildId = getConfig().getString("discord.guildId");
 
         if (e.getAuthor().isBot() || e.getChannelType() == ChannelType.PRIVATE  || !e.getGuild().getId().equals(guildId)) {
             return;
         }
 
-        if (e.getMessage().isMentioned(WhitelistBot.getJda().getSelfUser())) {
+        if (e.getMessage().isMentioned(getBot().getJDA().getSelfUser())) {
             e.getChannel().sendMessage("**Hai!! ^w^** My prefix is `" + prefix + "`.").queue();
             return;
         }
@@ -39,19 +37,19 @@ public class MessageListener extends ListenerAdapter {
         String commandName = args[0];
         args = Arrays.copyOfRange(args, 1, args.length);
 
-        if (!WhitelistBot.getCommands().containsKey(commandName)) {
+        if (!getBot().getCommands().containsKey(commandName)) {
             e.getChannel()
                     .sendMessage(":x: **Oops!** Unknown command `" + commandName + "` - do `" + prefix + "help` for a list of commands.")
                     .queue();
             return;
         }
 
-        WhitelistBot.getLogger().info(String.format("[discord] %s (%s) => %s", e.getAuthor().getAsTag(),e.getAuthor().getId(), commandName));
+        getLogger().info(String.format("[discord] %s (%s) => %s", e.getAuthor().getAsTag(),e.getAuthor().getId(), commandName));
 
         try {
-            WhitelistBot.getCommands().get(commandName).execute(e, args);
+            getBot().getCommands().get(commandName).execute(e, args);
         } catch(Exception err) {
-            WhitelistBot.getLogger().severe("Error in command '" + commandName + "':");
+            getBot().getLogger().severe("Error in command '" + commandName + "':");
             err.printStackTrace();
 
             e.getChannel().sendMessage(String.format(

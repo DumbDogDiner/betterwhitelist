@@ -1,10 +1,7 @@
 package com.dumbdogdiner.betterwhitelist_bungee.discord.listeners;
 
+import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
-
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -20,7 +17,7 @@ import java.util.UUID;
  * Listener that waits for members to leave/be banned and removes them from the
  * Minecraft whitelist.
  */
-public class GuildEventListener extends ListenerAdapter {
+public class GuildEventListener extends ListenerAdapter implements BaseClass {
     @Override
     public void onGuildMemberLeave(@Nonnull GuildMemberLeaveEvent e) {
         disconnectWithMessage(e.getUser().getId(), ChatColor.RED + "You have left " + e.getGuild().getName()
@@ -39,15 +36,15 @@ public class GuildEventListener extends ListenerAdapter {
      * @param id
      * @param message
      */
-    private static void disconnectWithMessage(String id, String message) {
-        if (!PluginConfig.getConfig().getBoolean("discord.enableBanSync")) {
-            WhitelistBot.getLogger()
+    private void disconnectWithMessage(String id, String message) {
+        if (!getConfig().getBoolean("discord.enableBanSync")) {
+            getLogger()
                     .info("[discord] Not removing user '" + id + "' from whitelist - enableBanSync=false");
             return;
         }
 
         // Disconnect the player if they are connected.
-        String playerUuid = SQL.getUuidFromDiscordId(id);
+        String playerUuid = getSQL().getUuidFromDiscordId(id);
         if (playerUuid == null) {
             return;
         }
@@ -57,11 +54,11 @@ public class GuildEventListener extends ListenerAdapter {
             return;
         }
 
-        WhitelistBot.getLogger().info("[discord][ban] Disconnecting player if they are still online...");
+        getLogger().info("[discord][ban] Disconnecting player if they are still online...");
         player.disconnect(new TextComponent(message));
 
-        if (SQL.removeEntry(id)) {
-            WhitelistBot.getLogger()
+        if (getSQL().removeEntry(id)) {
+            getLogger()
                     .info("[discord][ban] Removed user with Discord ID '" + id + "' from the whitelist.");
         }
     }

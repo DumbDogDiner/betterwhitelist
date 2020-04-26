@@ -5,6 +5,7 @@ import com.dumbdogdiner.betterwhitelist_bungee.bungee.commands.WhitelistCommand;
 import com.dumbdogdiner.betterwhitelist_bungee.bungee.commands.WhoisCommand;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist_bungee.bungee.listeners.PlayerEventListener;
+import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
 
 import net.dv8tion.jda.api.JDA;
@@ -23,9 +24,28 @@ public class BetterWhitelistBungee extends Plugin {
         return instance;
     }
 
+    private PluginConfig config;
+    private SQL sql;
+    private WhitelistBot bot;
+    
+    public PluginConfig getPluginConfig() {
+    	return config;
+    }
+    
+    public SQL getSQL() {
+    	return sql;
+    }
+    
+    public WhitelistBot getBot() {
+    	return bot;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
+        config = new PluginConfig();
+        bot = new WhitelistBot();
+        sql = new SQL();
         
         PluginManager manager = getProxy().getPluginManager();
 
@@ -33,11 +53,6 @@ public class BetterWhitelistBungee extends Plugin {
         manager.registerCommand(this, new WhoisCommand());
         manager.registerCommand(this, new WhitelistCommand());
         manager.registerCommand(this, new UnwhitelistCommand());
-
-        WhitelistBot.getInstance().init();
-        
-        SQL.init();
-        SQL.checkTable();
     }
 
     @Override
@@ -47,8 +62,8 @@ public class BetterWhitelistBungee extends Plugin {
         /* PluginConfig.saveConfig(); */
 
         // Shut down the Discord bot gracefully.
-        JDA jda = WhitelistBot.getJda();
-        if (jda != null) WhitelistBot.getJda().shutdown();
+        JDA jda = getBot().getJDA();
+        if (jda != null) getBot().getJDA().shutdown();
         
 
         getLogger().info("Aarrff!! (see you again soon :3)");
