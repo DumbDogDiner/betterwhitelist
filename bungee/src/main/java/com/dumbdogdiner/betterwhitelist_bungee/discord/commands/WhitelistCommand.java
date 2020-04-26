@@ -2,9 +2,11 @@ package com.dumbdogdiner.betterwhitelist_bungee.discord.commands;
 
 import com.dumbdogdiner.betterwhitelist_bungee.discord.lib.Command;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.utils.RoleUtil;
+import com.dumbdogdiner.betterwhitelist_bungee.utils.MojangUser;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.UsernameValidator;
+
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class WhitelistCommand extends Command {
@@ -47,7 +49,7 @@ public class WhitelistCommand extends Command {
             return;
         }
 
-        var user = UsernameValidator.getUser(args[0]);
+        MojangUser user = UsernameValidator.getUser(args[0]);
 
         if (user == null || user.id == null) {
             e.getChannel().sendMessage(":x: **Failed to verify!** Invalid Username - did you make a typo somewhere?")

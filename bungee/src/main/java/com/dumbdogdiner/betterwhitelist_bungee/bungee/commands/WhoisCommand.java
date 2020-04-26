@@ -2,6 +2,7 @@ package com.dumbdogdiner.betterwhitelist_bungee.bungee.commands;
 
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -21,7 +22,7 @@ public class WhoisCommand extends Command {
             return;
         }
 
-        var target = args[0];
+        String target = args[0];
 
         String discordId = null;
         String playerUuid;

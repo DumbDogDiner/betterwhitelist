@@ -1,9 +1,13 @@
 package com.dumbdogdiner.betterwhitelist_bungee.bungee.listeners;
 
+import java.util.List;
+
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+import com.dumbdogdiner.betterwhitelist_bungee.utils.MojangUser;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.UsernameValidator;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.PreLoginEvent;
@@ -25,14 +29,15 @@ public class PlayerEventListener implements Listener {
             return;
         }
 
-        var playerOverrides = PluginConfig.getConfig().getList("overrides");
+        // Can someone specify what type of data is in this list, thanks!
+        List<?> playerOverrides = PluginConfig.getConfig().getList("overrides");
         if (playerOverrides.contains(e.getConnection().getName())) {
             BetterWhitelistBungee.getInstance().getLogger()
                     .info("Skipping handling new player connection - user is in overrides.");
             return;
         }
 
-        var user = UsernameValidator.getUser(e.getConnection().getName());
+        MojangUser user = UsernameValidator.getUser(e.getConnection().getName());
 
         if (user == null) {
             return;

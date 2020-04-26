@@ -1,7 +1,9 @@
 package com.dumbdogdiner.betterwhitelist_bungee.bungee.commands;
 
+import com.dumbdogdiner.betterwhitelist_bungee.utils.MojangUser;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.UsernameValidator;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -20,7 +22,7 @@ public class UnwhitelistCommand extends Command {
             return;
         }
 
-        var user = UsernameValidator.getUser(args[0]);
+        MojangUser user = UsernameValidator.getUser(args[0]);
 
         if (user == null || user.id == null) {
             sender.sendMessage(new TextComponent(ChatColor.RED + "Unable to find a user of name '" + args[0] + "'."));

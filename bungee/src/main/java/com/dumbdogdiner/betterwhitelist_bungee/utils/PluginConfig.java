@@ -1,6 +1,7 @@
 package com.dumbdogdiner.betterwhitelist_bungee.utils;
 
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -30,7 +31,7 @@ public class PluginConfig {
      * @return
      */
     public static String getPrefix() {
-        var prefix = getConfig().getString("discord.prefix");
+        String prefix = getConfig().getString("discord.prefix");
         return prefix == null ? "-" : prefix;
     }
     /**
@@ -47,7 +48,7 @@ public class PluginConfig {
      * @param configuration
      */
     private static boolean writeConfig(Configuration configuration) {
-        var file =  new File(BetterWhitelistBungee.getInstance().getDataFolder(), "config.yml");
+        File file =  new File(BetterWhitelistBungee.getInstance().getDataFolder(), "config.yml");
 
         try {
             if (!file.exists()) {
@@ -79,8 +80,8 @@ public class PluginConfig {
      */
     private static Configuration loadConfig() {
 
-        var plugin = BetterWhitelistBungee.getInstance();
-        var file = new File(plugin.getDataFolder(), "config.yml");
+        BetterWhitelistBungee plugin = BetterWhitelistBungee.getInstance();
+        File file = new File(plugin.getDataFolder(), "config.yml");
 
         if (!file.exists()) {
             plugin.getLogger().warning("Plugin configuration 'config.yml' does not exist - using defaults...");
