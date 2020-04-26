@@ -14,7 +14,7 @@ plugins {
 }
 
 group 'com.dumbdogdiner'
-version '2.0.2-DEV'
+version '2.1.0-DEV'
 
 // Always run shadowJar whenever 'build' is called
 tasks.build.dependsOn tasks.shadowJar
@@ -53,4 +53,8 @@ shadowJar {
 }
 
 apply plugin: 'java'
+
+// Bugfix for no referenced libraries when using Eclipse.
+apply plugin: 'eclipse'
+
 apply plugin: 'com.github.johnrengelman.shadow'

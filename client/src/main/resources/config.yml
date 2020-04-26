@@ -1,9 +1,0 @@
-enableBanSync: true
-enableSql: false
-
-mysql:
-  host: "127.0.0.1"
-  database: "database"
-  port: "3306"
-  username: "root"
-  password: "password"
