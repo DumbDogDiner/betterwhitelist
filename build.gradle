@@ -53,4 +53,8 @@ shadowJar {
 }
 
 apply plugin: 'java'
+
+// Bugfix for no referenced libraries when using Eclipse.
+apply plugin: 'eclipse'
+
 apply plugin: 'com.github.johnrengelman.shadow'

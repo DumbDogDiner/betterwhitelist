@@ -50,3 +50,6 @@ gradle-app.setting
 
 # Extra gitignores
 **/.gitignore
+
+# Eclipse Gradle Plugin
+/bin/
