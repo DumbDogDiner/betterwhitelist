@@ -1,26 +1,6 @@
-# BetterWhitelist
+# BetterWhitelist[Bungee]
 
 Fork of [this](https://github.com/Dumb-Dog-Diner-Development/betterwhitelister) plugin by Jaquewolfee, rewritten to be compatible with BungeeCord.
-
-## Overview
-
-BetterWhitelist is a Bungee-compatible plugin for managing global bans shared between a BungeeCord network and any attached Discord servers.
-
-**Everything is currently broken!!!** I'm working on moving the old code into two separate plugins:
-
-- `BetterWhitelisterClient` - lives in the server instances
-- `BetterWhitelisterBungee` - lives on the bungee proxy instance
-
-The Bungee plugin will do most of the heavy lifting, managing the global ban list, informing server instances of new bans, etc. 
-Each instance of the client plugin will request updates be made to the ban database, which will be propagated to all online server instances.
-Similarly, config updates made on one server will be shared between all instances (unless you specify otherwise).
-
-## To-Do List
-- [x] ~~Separate the Bungee-related logic from the client logic~~
-- [x] ~~Implement client-side messaging to Bungee + event handling for received messages~~ **- might need some work**
-- [x] ~~Tidy up old Discord logic~~
-- [x] ~~Implement Bungee messaging logic/event handling~~
-- [x] ~~Fix gradle build configuration~~
 
 ## Storage
 
@@ -29,11 +9,64 @@ server instances using the `BungeeCord` plugin messaging channel.
 
 ## Building the plugin JARs
 
-We are using a gradle plugin titled `shadow` to build the jar files for Paper:
+`$ gradle build`
 
+## Configuration
+
+The default configuration is shown below - comments are removed by the build process, so your `config.yml` won't look like this!
+
+```yaml
+# Whether to connect to the SQL server. Enable this if you want the bot to
+# be able to store whitelisted users.
+enableSql: false
+
+# MySQL Database Details
+# The bot requires SELECT, INSERT, CREATE and DELETE privileges.
+mysql:
+  host: "127.0.0.1"
+  database: "database"
+  port: "3306"
+  username: "root"
+  password: "password"
+
+discord:
+  # Bot token the plugin should use.
+  token: 'discord token here'
+
+  # The ID of the guild you want the bot to listen in.
+  guildId: 'guild id here'
+
+  # The prefix the bot should use.
+  prefix: '-'
+
+  # Whether users are able to run the `-minecraft <username>` command
+  # and verify themselves.
+  enableSelfWhitelisting: true
+
+  # Enable ban syncing. Users will be banned on both Discord and Minecraft.
+  # Bot will require permissions to ban users on Discord!!
+  enableBanSync: true
+
+  # Restrict Discord users to one Minecraft account. If set to false, users can connect
+  # as many Minecraft accounts to their Discord account as they want.
+  oneAccountPerUser: true
+
+  roles:
+    # The role users are required to have to be able to be whitelisted.
+    requiredRole:
+      enabled: false
+      roleId: 'required role id here'
+
+    # The role users are granted once whitelisted.
+    grantedRole:
+      enabled: false
+      silent: false
+      roleId: ''
 ```
-$ gradle shadowJar
-```
 
-This will output a fresh JAR into `./{project}/build/libs` - currently needs to be done on a per-project basis.
+## Discord Commands
 
+- `-whitelist <username>` - add a user to the whitelist. Throws an error if the user could not be found on Mojang's servers. If a user already has an account registered, and `oneAccountPerUser` is enabled, the user will not be able to add another username.
+- `-unwhitelist` - remove a user from the whitelist.
+- `-help` - display a help message.
+- `-status` - retrieve brief bot status information.

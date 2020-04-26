@@ -10,26 +10,16 @@ node('docker-cli') {
 
       checkout scm
 
-      sh 'cd bungee && chmod +x ./gradlew'
-      sh 'cd client && chmod +x ./gradlew'
+      sh 'chmod +x ./gradlew'
     }
 
-    stage('Build Bungee') {
+    stage('Build') {
       // Setup the build environment and build the code
-      sh 'cd bungee && gradle wrapper && ./gradlew build -s'
+      sh 'gradle wrapper && ./gradlew build -s'
         
-      archiveArtifacts artifacts: 'bungee/build/libs/*.jar', fingerprint: true
+      archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
 				
-      ghSetStatus("The build passed.", "success", "ci/bungee")
-    }
-      
-    stage('Build Bukkit') {	
-      // Setup the build environment and build the code
-      sh 'cd client && gradle wrapper && ./gradlew build -s'
-				
-      archiveArtifacts artifacts: 'client/build/libs/*.jar', fingerprint: true
-				
-      ghSetStatus("The build passed.", "success", "ci/bukkit")
+      ghSetStatus("The build passed.", "success", "ci")
     }
   }
 }
