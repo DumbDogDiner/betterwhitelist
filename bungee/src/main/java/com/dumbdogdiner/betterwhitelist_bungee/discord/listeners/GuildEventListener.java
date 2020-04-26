@@ -4,11 +4,14 @@ import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
+
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
@@ -44,12 +47,12 @@ public class GuildEventListener extends ListenerAdapter {
         }
 
         // Disconnect the player if they are connected.
-        var playerUuid = SQL.getUuidFromDiscordId(id);
+        String playerUuid = SQL.getUuidFromDiscordId(id);
         if (playerUuid == null) {
             return;
         }
 
-        var player = BetterWhitelistBungee.getInstance().getProxy().getPlayer(UUID.fromString(playerUuid));
+        ProxiedPlayer player = BetterWhitelistBungee.getInstance().getProxy().getPlayer(UUID.fromString(playerUuid));
         if (player == null) {
             return;
         }

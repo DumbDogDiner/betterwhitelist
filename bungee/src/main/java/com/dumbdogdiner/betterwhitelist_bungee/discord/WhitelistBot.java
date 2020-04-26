@@ -10,6 +10,7 @@ import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.GuildEventListe
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.MessageListener;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.ReadyListener;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
+
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -17,6 +18,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -55,7 +57,7 @@ public class WhitelistBot {
      * Initialize the bot.
      */
     public void init() {
-        var builder = new JDABuilder(AccountType.BOT)
+        JDABuilder builder = new JDABuilder(AccountType.BOT)
             .setToken(PluginConfig.getConfig().getString("discord.token"));
 
         configureMemory(builder);

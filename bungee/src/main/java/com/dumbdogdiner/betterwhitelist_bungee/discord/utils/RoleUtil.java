@@ -2,6 +2,9 @@ package com.dumbdogdiner.betterwhitelist_bungee.discord.utils;
 
 import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
+
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class RoleUtil {
@@ -15,9 +18,9 @@ public class RoleUtil {
             return true;
         }
 
-        var roleId = PluginConfig.getConfig().getString("discord.roles.requiredRole.roleId");
-        var role = e.getGuild().getRoleById(roleId);
-        var member = e.getMember();
+        String roleId = PluginConfig.getConfig().getString("discord.roles.requiredRole.roleId");
+        Role role = e.getGuild().getRoleById(roleId);
+        Member member = e.getMember();
 
         // Prevent whitelisting just in case.
         if (role == null || member == null) {
@@ -35,9 +38,9 @@ public class RoleUtil {
     public static void addGrantedRole(MessageReceivedEvent e) {
         if (PluginConfig.getConfig().getBoolean("discord.roles.grantedRole.enabled")) {
             try {
-                var roleId = PluginConfig.getConfig().getString("discord.roles.grantedRole.roleId");
-                var role = e.getGuild().getRoleById(roleId);
-                var member = e.getMember();
+                String roleId = PluginConfig.getConfig().getString("discord.roles.grantedRole.roleId");
+                Role role = e.getGuild().getRoleById(roleId);
+                Member member = e.getMember();
 
                 // If the role doesn't exist, inform the user that something went wrong.
                 if (role == null || member == null) {
@@ -83,9 +86,9 @@ public class RoleUtil {
     public static void removeGrantedRole(MessageReceivedEvent e) {
         if (PluginConfig.getConfig().getBoolean("discord.roles.grantedRole.enabled")) {
             try {
-                var roleId = PluginConfig.getConfig().getString("discord.roles.grantedRole.roleId");
-                var role = e.getGuild().getRoleById(roleId);
-                var member = e.getMember();
+                String roleId = PluginConfig.getConfig().getString("discord.roles.grantedRole.roleId");
+                Role role = e.getGuild().getRoleById(roleId);
+                Member member = e.getMember();
 
                 // If the role doesn't exist, inform the user that something went wrong.
                 if (role == null || member == null) {

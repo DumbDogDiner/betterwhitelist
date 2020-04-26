@@ -6,7 +6,10 @@ import com.dumbdogdiner.betterwhitelist_bungee.bungee.commands.WhoisCommand;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist_bungee.bungee.listeners.PlayerEventListener;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
+
+import net.dv8tion.jda.api.JDA;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginManager;
 
 /**
  * The Bungee proxy plugin for propagating whitelist changes/bans to all
@@ -20,14 +23,11 @@ public class BetterWhitelistBungee extends Plugin {
         return instance;
     }
 
-    // Spigot only calls the constructor method once, so this should work.
-    public BetterWhitelistBungee() {
-        instance = this;
-    }
-
     @Override
     public void onEnable() {
-        var manager = getProxy().getPluginManager();
+        instance = this;
+        
+        PluginManager manager = getProxy().getPluginManager();
 
         manager.registerListener(this, new PlayerEventListener());
         manager.registerCommand(this, new WhoisCommand());
@@ -47,10 +47,9 @@ public class BetterWhitelistBungee extends Plugin {
         /* PluginConfig.saveConfig(); */
 
         // Shut down the Discord bot gracefully.
-        var jda = WhitelistBot.getJda();
-        if (jda != null) {
-            WhitelistBot.getJda().shutdown();
-        }
+        JDA jda = WhitelistBot.getJda();
+        if (jda != null) WhitelistBot.getJda().shutdown();
+        
 
         getLogger().info("Aarrff!! (see you again soon :3)");
     }

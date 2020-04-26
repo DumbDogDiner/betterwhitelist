@@ -2,6 +2,7 @@ package com.dumbdogdiner.betterwhitelist_bungee.bungee.commands;
 
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -11,22 +12,17 @@ import net.md_5.bungee.api.plugin.Command;
 public class WhoisCommand extends Command {
 
     public WhoisCommand() {
-        super("btw_whois");
+        super("btw_whois", "betterwhitelist.read.whois");
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (sender instanceof ProxiedPlayer) {
-            sender.sendMessage(
-                    new TextComponent(ChatColor.RED + "This command can only be used from the bungee console."));
+        if (args.length == 0 || args[0] == null || args.length > 1) {
+            sender.sendMessage(new TextComponent(ChatColor.RED + "Command Syntax: whois <uuid/discord/name>"));
             return;
         }
 
-        if (args.length == 0 || args[0] == null || args.length > 1) {
-            sender.sendMessage(new TextComponent(ChatColor.RED + "Command Syntax: whois <uuid/discord/name>"));
-        }
-
-        var target = args[0];
+        String target = args[0];
 
         String discordId = null;
         String playerUuid;

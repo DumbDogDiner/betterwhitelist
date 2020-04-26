@@ -16,6 +16,9 @@ plugins {
 group 'com.dumbdogdiner'
 version '2.0-SNAPSHOT'
 
+// Always run shadowJar whenever 'build' is called
+tasks.build.dependsOn tasks.shadowJar
+
 sourceCompatibility = 11
 
 repositories {

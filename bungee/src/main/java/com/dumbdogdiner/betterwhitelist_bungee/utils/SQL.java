@@ -1,6 +1,7 @@
 package com.dumbdogdiner.betterwhitelist_bungee.utils;
 
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -21,7 +22,7 @@ public class SQL {
 
     public static void init() {
         // Create and configure SQL configuration.
-        var config = new HikariConfig();
+        HikariConfig config = new HikariConfig();
         config.setJdbcUrl(databaseUrl);
         config.setUsername(PluginConfig.getConfig().getString("mysql.username"));
         config.setPassword(PluginConfig.getConfig().getString("mysql.password"));
@@ -71,7 +72,7 @@ public class SQL {
         BetterWhitelistBungee.getInstance().getLogger().info("[sql] Checking the UUID table is valid...");
 
         try {
-            var statement = createStatement();
+            Statement statement = createStatement();
             String checkTable = "CREATE TABLE IF NOT EXISTS `minecraft_whitelist` (`discordID` VARCHAR(20),`minecraft_uuid` VARCHAR(36));";
             statement.executeUpdate(checkTable);
             statement.getConnection().close();
@@ -93,8 +94,8 @@ public class SQL {
         BetterWhitelistBungee.getInstance().getLogger().info("[sql] Upgrading table...");
 
         try {
-            var statement = createStatement();
-            var update = "ALTER TABLE `minecraft_whitelist` RENAME COLUMN `discordID` TO `discord_id`";
+            Statement statement = createStatement();
+            String update = "ALTER TABLE `minecraft_whitelist` RENAME COLUMN `discordID` TO `discord_id`";
 
             statement.executeUpdate(update);
 
@@ -111,7 +112,7 @@ public class SQL {
     private static boolean checkIfUpgradeable() {
 
         try {
-            var result = createStatement().executeQuery(
+            ResultSet result = createStatement().executeQuery(
                     "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`");
 
             while (result.next()) {
@@ -141,13 +142,13 @@ public class SQL {
         }
 
         try {
-            var statement = createStatement();
-            var result = statement.executeQuery(
+            Statement statement = createStatement();
+            ResultSet result = statement.executeQuery(
                     "SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
 
             // Return the first result.
             while (result.next()) {
-                var id = result.getString(1);
+                String id = result.getString(1);
                 statement.close();
                 return id;
             }
@@ -176,12 +177,12 @@ public class SQL {
         }
 
         try {
-            var statement = createStatement();
-            var result = statement.executeQuery(
+            Statement statement = createStatement();
+            ResultSet result = statement.executeQuery(
                     "SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
 
             if (result.next()) {
-                var uuid = result.getString(1);
+                String uuid = result.getString(1);
                 statement.close();
 
                 // BetterWhitelistBungee.getInstance().getLogger().info("Got '" + uuid + "' for
@@ -212,7 +213,7 @@ public class SQL {
         }
 
         try {
-            var statement = createStatement();
+            Statement statement = createStatement();
             statement.executeUpdate("INSERT IGNORE INTO `minecraft_whitelist` (`discordID`, `minecraft_uuid`) VALUES ('"
                     + discordID + "','" + uuid + "');");
             statement.close();
@@ -249,7 +250,7 @@ public class SQL {
         }
 
         try {
-            var statement = createStatement();
+            Statement statement = createStatement();
             statement.executeUpdate("DELETE FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
             statement.close();
 
@@ -277,7 +278,7 @@ public class SQL {
         }
 
         try {
-            var statement = createStatement();
+            Statement statement = createStatement();
             statement.executeUpdate("DELETE FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
             statement.close();
             return true;

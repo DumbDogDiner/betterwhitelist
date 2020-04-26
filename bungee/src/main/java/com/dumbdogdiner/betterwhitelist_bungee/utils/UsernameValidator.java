@@ -19,13 +19,13 @@ public class UsernameValidator {
      */
     public static MojangUser getUser(String username) {
         // Make request to Mojang and decode JSON body.
-        var json = fetchUserJson(username);
+        String json = fetchUserJson(username);
 
         if (json == null || json.equals("")) {
             return null;
         }
 
-        var result = new Gson().fromJson(json, MojangUser.class);
+        MojangUser result = new Gson().fromJson(json, MojangUser.class);
         result.id = hyphenateUUID(result.id);
 
         return result;
@@ -51,8 +51,8 @@ public class UsernameValidator {
      */
     private static String fetchUserJson(String username) {
         try {
-            var input = new URL(formUrl(username)).openStream();
-            var reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+            InputStream input = new URL(formUrl(username)).openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
 
             StringBuilder builder = new StringBuilder();
             int character;
