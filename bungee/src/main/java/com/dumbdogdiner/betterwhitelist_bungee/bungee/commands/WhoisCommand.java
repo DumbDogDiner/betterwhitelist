@@ -11,19 +11,14 @@ import net.md_5.bungee.api.plugin.Command;
 public class WhoisCommand extends Command {
 
     public WhoisCommand() {
-        super("btw_whois");
+        super("btw_whois", "betterwhitelist.read.whois");
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (sender instanceof ProxiedPlayer) {
-            sender.sendMessage(
-                    new TextComponent(ChatColor.RED + "This command can only be used from the bungee console."));
-            return;
-        }
-
         if (args.length == 0 || args[0] == null || args.length > 1) {
             sender.sendMessage(new TextComponent(ChatColor.RED + "Command Syntax: whois <uuid/discord/name>"));
+            return;
         }
 
         var target = args[0];
