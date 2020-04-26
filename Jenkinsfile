@@ -3,6 +3,7 @@
 // Made by @Prouser123 for https://ci.jcx.ovh.
 
 node('docker-cli') {
+  cleanWs()
   docker.image('jcxldn/jenkins-containers:jdk11-gradle-ubuntu').inside {
 
     stage('Setup') {
