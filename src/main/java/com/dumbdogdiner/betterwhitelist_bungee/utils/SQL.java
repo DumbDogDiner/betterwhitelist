@@ -148,7 +148,7 @@ public class SQL implements BaseClass {
             // Return the first result.
             while (result.next()) {
                 String id = result.getString(1);
-                statement.close();
+                statement.getConnection().close();
                 return id;
             }
 
@@ -181,7 +181,7 @@ public class SQL implements BaseClass {
 
             if (result.next()) {
                 String uuid = result.getString(1);
-                statement.close();
+                statement.getConnection().close();
 
                 // BetterWhitelistBungee.getInstance().getLogger().info("Got '" + uuid + "' for
                 // ID '" + discordID + "'.");
@@ -213,7 +213,7 @@ public class SQL implements BaseClass {
             Statement statement = createStatement();
             statement.executeUpdate("INSERT IGNORE INTO `minecraft_whitelist` (`discordID`, `minecraft_uuid`) VALUES ('"
                     + discordID + "','" + uuid + "');");
-            statement.close();
+            statement.getConnection().close();
 
             getLogger().info("Added whitelist entry: '" + discordID + "' => '" + uuid + "'");
 
@@ -246,7 +246,7 @@ public class SQL implements BaseClass {
         try {
             Statement statement = createStatement();
             statement.executeUpdate("DELETE FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
-            statement.close();
+            statement.getConnection().close();
 
             getLogger().info("Removed whitelist entry: '" + discordID + "'");
 
@@ -273,7 +273,7 @@ public class SQL implements BaseClass {
         try {
             Statement statement = createStatement();
             statement.executeUpdate("DELETE FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
-            statement.close();
+            statement.getConnection().close();
             return true;
         }
 
