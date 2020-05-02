@@ -1,7 +1,3 @@
-# Whether to connect to the SQL server. Enable this if you want the bot to
-# be able to store whitelisted users.
-enableSql: false
-
 ## Whether to disable checking for player UUIDs on join.
 disableUuidChecking: false
 

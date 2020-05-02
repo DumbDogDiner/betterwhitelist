@@ -1,12 +1,13 @@
 package com.dumbdogdiner.betterwhitelist_bungee.utils;
 
 import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
-import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * SQL wrapper for fetching/storing user whitelist data.
@@ -17,9 +18,7 @@ public class SQL implements BaseClass {
             getConfig().getString("mysql.host"), getConfig().getString("mysql.port"),
             getConfig().getString("mysql.database"));
 
-    private Boolean enabled = getConfig().getBoolean("enableSql");
-
-    private HikariDataSource ds;
+    public final HikariDataSource ds;
 
     public SQL() {
         // Create and configure SQL configuration.
@@ -33,22 +32,35 @@ public class SQL implements BaseClass {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         ds = new HikariDataSource(config);
-
+        
         checkTable();
     }
+    
+    private void createAndExecUpdate(String request) throws SQLException {
+    	Statement statement = ds.getConnection().createStatement();
+    	
+    	statement.executeUpdate(request);
+    	
+    	statement.getConnection().close();
+    }
+    
+    private QueryResponse createAndExecQuery(String request) throws SQLException {
+    	Statement statement = ds.getConnection().createStatement();
+    	
+    	ResultSet result = statement.executeQuery(request);
+    	
+    	return new QueryResponse(result, statement);
+    }
+    
+    private class QueryResponse {
+    	
+    	public ResultSet result;
+		public Statement statement;
 
-    /**
-     * Fetch a connection from the pool, and use it to create a new SQL statement.
-     * 
-     * @return
-     * @throws Exception
-     */
-    private Statement createStatement() throws Exception {
-        if (!enabled) {
-            throw new Exception("SQL disabled.");
-        }
-
-        return ds.getConnection().createStatement();
+    	private QueryResponse (ResultSet result, Statement statement) {
+    		this.result = result;
+    		this.statement = statement;
+    	}
     }
 
     /**
@@ -64,21 +76,13 @@ public class SQL implements BaseClass {
      * Check that the SQL table storing player UUIDs is valid.
      */
     public void checkTable() {
-        if (!enabled) {
-            getLogger().warning("SQL connection has been disabled in 'config.yml'.");
-            return;
-        }
-
         getLogger().info("[sql] Checking the UUID table is valid...");
 
         try {
-            Statement statement = createStatement();
-            String checkTable = "CREATE TABLE IF NOT EXISTS `minecraft_whitelist` (`discordID` VARCHAR(20),`minecraft_uuid` VARCHAR(36));";
-            statement.executeUpdate(checkTable);
-            statement.getConnection().close();
+        	createAndExecUpdate("CREATE TABLE IF NOT EXISTS `minecraft_whitelist` (`discordID` VARCHAR(20),`minecraft_uuid` VARCHAR(36));");
         }
 
-        catch (Exception e) {
+        catch (SQLException e) {
             handleSQLError(e);
         }
     }
@@ -94,14 +98,8 @@ public class SQL implements BaseClass {
         getLogger().info("[sql] Upgrading table...");
 
         try {
-            Statement statement = createStatement();
-            String update = "ALTER TABLE `minecraft_whitelist` RENAME COLUMN `discordID` TO `discord_id`";
-
-            statement.executeUpdate(update);
-
-            update = "";
-
-        } catch (Exception e) {
+        	createAndExecUpdate("ALTER TABLE `minecraft_whitelist` RENAME COLUMN `discordID` TO `discord_id`");
+        } catch (SQLException e) {
             handleSQLError(e);
         }
     }
@@ -112,8 +110,7 @@ public class SQL implements BaseClass {
     private boolean checkIfUpgradeable() {
 
         try {
-            ResultSet result = createStatement().executeQuery(
-                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`");
+        	ResultSet result = createAndExecQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`").result;
 
             while (result.next()) {
                 if (result.getString(1) == "discord_id") {
@@ -122,7 +119,7 @@ public class SQL implements BaseClass {
             }
 
             return false;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             handleSQLError(e);
             return false;
         }
@@ -135,20 +132,13 @@ public class SQL implements BaseClass {
      * @return
      */
     public String getDiscordIDFromMinecraft(String uuid) {
-        if (!enabled) {
-            getLogger().warning("SQL connection has been disabled in 'config.yml'.");
-            return null;
-        }
-
         try {
-            Statement statement = createStatement();
-            ResultSet result = statement.executeQuery(
-                    "SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
+        	QueryResponse res = createAndExecQuery("SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
 
             // Return the first result.
-            while (result.next()) {
-                String id = result.getString(1);
-                statement.getConnection().close();
+            while (res.result.next()) {
+                String id = res.result.getString(1);
+                res.statement.getConnection().close();
                 return id;
             }
 
@@ -156,7 +146,7 @@ public class SQL implements BaseClass {
             return null;
         }
 
-        catch (Exception e) {
+        catch (SQLException e) {
             handleSQLError(e);
             return null;
         }
@@ -169,19 +159,12 @@ public class SQL implements BaseClass {
      * @return
      */
     public String getUuidFromDiscordId(String discordID) {
-        if (!enabled) {
-            getLogger().warning("SQL connection has been disabled in 'config.yml'.");
-            return null;
-        }
-
         try {
-            Statement statement = createStatement();
-            ResultSet result = statement.executeQuery(
-                    "SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
-
-            if (result.next()) {
-                String uuid = result.getString(1);
-                statement.getConnection().close();
+        	QueryResponse res = createAndExecQuery("SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
+        	
+            if (res.result.next()) {
+                String uuid = res.result.getString(1);
+                res.statement.getConnection().close();
 
                 // BetterWhitelistBungee.getInstance().getLogger().info("Got '" + uuid + "' for
                 // ID '" + discordID + "'.");
@@ -191,7 +174,7 @@ public class SQL implements BaseClass {
             return null;
         }
 
-        catch (Exception e) {
+        catch (SQLException e) {
             handleSQLError(e);
             return null;
         }
@@ -204,23 +187,15 @@ public class SQL implements BaseClass {
      * @param uuid
      */
     public boolean addEntry(String discordID, String uuid) {
-        if (!enabled) {
-            getLogger().warning("SQL connection has been disabled in 'config.yml'.");
-            return false;
-        }
-
         try {
-            Statement statement = createStatement();
-            statement.executeUpdate("INSERT IGNORE INTO `minecraft_whitelist` (`discordID`, `minecraft_uuid`) VALUES ('"
-                    + discordID + "','" + uuid + "');");
-            statement.getConnection().close();
+        	createAndExecUpdate("INSERT IGNORE INTO `minecraft_whitelist` (`discordID`, `minecraft_uuid`) VALUES ('" + discordID + "','" + uuid + "');");
 
             getLogger().info("Added whitelist entry: '" + discordID + "' => '" + uuid + "'");
 
             return true;
         }
 
-        catch (Exception e) {
+        catch (SQLException e) {
             handleSQLError(e);
             return false;
         }
@@ -232,11 +207,6 @@ public class SQL implements BaseClass {
      * @param discordID
      */
     public boolean removeEntry(String discordID) {
-        if (!enabled) {
-            getLogger().warning("SQL connection has been disabled in 'config.yml'.");
-            return false;
-        }
-
         // Check to make sure entry exists to be removed.
         if (getUuidFromDiscordId(discordID) == null) {
             getLogger().warning("Request to remove non-existent whitelist entry for ID '" + discordID + "'.");
@@ -244,16 +214,14 @@ public class SQL implements BaseClass {
         }
 
         try {
-            Statement statement = createStatement();
-            statement.executeUpdate("DELETE FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
-            statement.getConnection().close();
+        	createAndExecUpdate("DELETE FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
 
             getLogger().info("Removed whitelist entry: '" + discordID + "'");
 
             return true;
         }
 
-        catch (Exception e) {
+        catch (SQLException e) {
             handleSQLError(e);
             return false;
         }
@@ -265,19 +233,12 @@ public class SQL implements BaseClass {
      * @param uuid
      */
     public boolean removeEntryUsingUuid(String uuid) {
-        if (!enabled) {
-            getLogger().warning("SQL connection has been disabled in 'config.yml'.");
-            return false;
-        }
-
         try {
-            Statement statement = createStatement();
-            statement.executeUpdate("DELETE FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
-            statement.getConnection().close();
+        	createAndExecUpdate("DELETE FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
             return true;
         }
 
-        catch (Exception e) {
+        catch (SQLException e) {
             handleSQLError(e);
             return false;
         }
