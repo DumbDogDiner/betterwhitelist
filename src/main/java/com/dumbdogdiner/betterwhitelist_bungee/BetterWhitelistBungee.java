@@ -65,6 +65,9 @@ public class BetterWhitelistBungee extends Plugin {
         JDA jda = getBot().getJDA();
         if (jda != null) getBot().getJDA().shutdown();
         
+        // Close the SQL datasource.
+        getSQL().ds.close();
+        
 
         getLogger().info("Aarrff!! (see you again soon :3)");
     }
