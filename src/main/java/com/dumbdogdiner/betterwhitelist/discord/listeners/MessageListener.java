@@ -1,6 +1,6 @@
-package com.dumbdogdiner.betterwhitelist_bungee.discord.listeners;
+package com.dumbdogdiner.betterwhitelist.discord.listeners;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
+import com.dumbdogdiner.betterwhitelist.BaseClass;
 
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

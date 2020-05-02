@@ -1,4 +1,4 @@
-package com.dumbdogdiner.betterwhitelist_bungee.utils;
+package com.dumbdogdiner.betterwhitelist.utils;
 
 import com.google.gson.Gson;
 

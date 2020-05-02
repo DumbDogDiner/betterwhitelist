@@ -1,14 +1,14 @@
-package com.dumbdogdiner.betterwhitelist_bungee.discord;
+package com.dumbdogdiner.betterwhitelist.discord;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.commands.GetStatusCommand;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.commands.HelpCommand;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.commands.UnwhitelistCommand;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.commands.WhitelistCommand;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.lib.Command;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.GuildEventListener;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.MessageListener;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.ReadyListener;
+import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.discord.commands.GetStatusCommand;
+import com.dumbdogdiner.betterwhitelist.discord.commands.HelpCommand;
+import com.dumbdogdiner.betterwhitelist.discord.commands.UnwhitelistCommand;
+import com.dumbdogdiner.betterwhitelist.discord.commands.WhitelistCommand;
+import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
+import com.dumbdogdiner.betterwhitelist.discord.listeners.GuildEventListener;
+import com.dumbdogdiner.betterwhitelist.discord.listeners.MessageListener;
+import com.dumbdogdiner.betterwhitelist.discord.listeners.ReadyListener;
 
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;

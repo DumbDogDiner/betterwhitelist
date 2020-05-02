@@ -1,12 +1,12 @@
-package com.dumbdogdiner.betterwhitelist_bungee;
+package com.dumbdogdiner.betterwhitelist;
 
-import com.dumbdogdiner.betterwhitelist_bungee.bungee.commands.UnwhitelistCommand;
-import com.dumbdogdiner.betterwhitelist_bungee.bungee.commands.WhitelistCommand;
-import com.dumbdogdiner.betterwhitelist_bungee.bungee.commands.WhoisCommand;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
-import com.dumbdogdiner.betterwhitelist_bungee.bungee.listeners.PlayerEventListener;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
+import com.dumbdogdiner.betterwhitelist.commands.UnwhitelistCommand;
+import com.dumbdogdiner.betterwhitelist.commands.WhitelistCommand;
+import com.dumbdogdiner.betterwhitelist.commands.WhoisCommand;
+import com.dumbdogdiner.betterwhitelist.discord.WhitelistBot;
+import com.dumbdogdiner.betterwhitelist.listeners.PlayerEventListener;
+import com.dumbdogdiner.betterwhitelist.utils.PluginConfig;
+import com.dumbdogdiner.betterwhitelist.utils.SQL;
 
 import net.dv8tion.jda.api.JDA;
 

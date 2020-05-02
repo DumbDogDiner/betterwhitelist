@@ -1,4 +1,4 @@
-package com.dumbdogdiner.betterwhitelist_bungee.discord.lib;
+package com.dumbdogdiner.betterwhitelist.discord.lib;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

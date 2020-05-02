@@ -1,7 +1,7 @@
-package com.dumbdogdiner.betterwhitelist_bungee.utils;
+package com.dumbdogdiner.betterwhitelist.utils;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
-import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.BetterWhitelistBungee;
 
 import com.google.common.io.ByteStreams;
 

@@ -1,7 +1,7 @@
-package com.dumbdogdiner.betterwhitelist_bungee.discord.listeners;
+package com.dumbdogdiner.betterwhitelist.discord.listeners;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
-import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.BetterWhitelistBungee;
 
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;

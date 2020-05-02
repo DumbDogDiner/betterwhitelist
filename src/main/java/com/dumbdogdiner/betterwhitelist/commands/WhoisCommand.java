@@ -1,7 +1,7 @@
-package com.dumbdogdiner.betterwhitelist_bungee.bungee.commands;
+package com.dumbdogdiner.betterwhitelist.commands;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
-import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.BetterWhitelistBungee;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;

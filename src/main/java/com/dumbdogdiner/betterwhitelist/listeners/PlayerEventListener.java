@@ -1,11 +1,11 @@
-package com.dumbdogdiner.betterwhitelist_bungee.bungee.listeners;
+package com.dumbdogdiner.betterwhitelist.listeners;
 
 import java.util.List;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
-import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.MojangUser;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.UsernameValidator;
+import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.BetterWhitelistBungee;
+import com.dumbdogdiner.betterwhitelist.utils.MojangUser;
+import com.dumbdogdiner.betterwhitelist.utils.UsernameValidator;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;

@@ -1,6 +1,6 @@
-package com.dumbdogdiner.betterwhitelist_bungee.utils;
+package com.dumbdogdiner.betterwhitelist.utils;
 
-import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
+import com.dumbdogdiner.betterwhitelist.BaseClass;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

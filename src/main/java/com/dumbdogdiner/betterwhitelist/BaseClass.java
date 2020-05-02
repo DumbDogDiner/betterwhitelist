@@ -1,12 +1,12 @@
-package com.dumbdogdiner.betterwhitelist_bungee;
+package com.dumbdogdiner.betterwhitelist;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
-import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
+import com.dumbdogdiner.betterwhitelist.discord.WhitelistBot;
+import com.dumbdogdiner.betterwhitelist.utils.PluginConfig;
+import com.dumbdogdiner.betterwhitelist.utils.SQL;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.PluginDescription;
