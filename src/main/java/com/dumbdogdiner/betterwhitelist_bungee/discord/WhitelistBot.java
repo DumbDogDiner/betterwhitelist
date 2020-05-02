@@ -9,6 +9,7 @@ import com.dumbdogdiner.betterwhitelist_bungee.discord.lib.Command;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.GuildEventListener;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.MessageListener;
 import com.dumbdogdiner.betterwhitelist_bungee.discord.listeners.ReadyListener;
+
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

@@ -2,6 +2,7 @@ package com.dumbdogdiner.betterwhitelist_bungee.utils;
 
 import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
 import com.dumbdogdiner.betterwhitelist_bungee.BetterWhitelistBungee;
+
 import com.google.common.io.ByteStreams;
 
 import net.md_5.bungee.config.Configuration;

@@ -2,14 +2,12 @@ package com.dumbdogdiner.betterwhitelist_bungee;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
 import com.dumbdogdiner.betterwhitelist_bungee.utils.SQL;
 
-import net.dv8tion.jda.api.JDA;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.PluginDescription;
 import net.md_5.bungee.config.Configuration;

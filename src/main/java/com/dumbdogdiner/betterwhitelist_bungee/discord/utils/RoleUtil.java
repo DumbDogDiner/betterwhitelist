@@ -1,8 +1,6 @@
 package com.dumbdogdiner.betterwhitelist_bungee.discord.utils;
 
 import com.dumbdogdiner.betterwhitelist_bungee.BaseClass;
-import com.dumbdogdiner.betterwhitelist_bungee.discord.WhitelistBot;
-import com.dumbdogdiner.betterwhitelist_bungee.utils.PluginConfig;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
