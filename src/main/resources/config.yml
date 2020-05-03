@@ -45,6 +45,31 @@ discord:
       roleId: ""
 
 lang:
-  disconnectMessage: "You are not whitelisted on this network!"
-  uuidCheckingDisabled: "Skipping handling new player connection - checking disabled."
-  checkingUuid: "Checking that UUID '%s' is whitelisted..."
+  onDisable: "Aarrff!! (see you again soon :3)"
+  
+  discordStatus: "the cutest fuzzballs \uD83E\uDDE1"
+  
+  player:
+    disconnectMessage: "You are not whitelisted on this network!"
+  
+  console:
+    postLogin:
+      uuidCheckingDisabled: "Skipping handling new player connection - checking disabled."
+      checkingUuid: "Checking that UUID '%s' is whitelisted..."
+      
+    sql:
+      handleSqlError: "Failed to execute SQL statement."
+      checkTable: "Checking the UUID table is valid..."
+      upgradingTable: "Upgrading table..."
+      addEntry: "Added whitelist entry: '%s' => '%s'"
+      removeEntryPreWarning: "Request to remove non-existent whitelist entry for ID '%s'."
+      removeEntryPostInfo: "Removed whitelist entry: '%s'"
+    
+    config:
+      save: "Saving configuration to disk..."
+      loadError: "Error loading config.yml"
+    
+    discord:
+      commands: "Have %d commands: %s"
+      attemptingConnection: "Attempting connection to Discord..."
+      loginError: "WhitelistBot threw an error while trying to authenticate with Discord."

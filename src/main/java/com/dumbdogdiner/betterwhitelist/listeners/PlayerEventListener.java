@@ -22,7 +22,7 @@ public class PlayerEventListener implements Listener, BaseClass {
     public void onPostLoginEvent(ProxiedPlayer player) {
         if (getConfig().getBoolean("disableUuidChecking")) {
             BetterWhitelistBungee.getInstance().getLogger()
-                    .info(getConfig().getString("lang.uuidCheckingDisabled"));
+                    .info(getConfig().getString("lang.console.postLogin.uuidCheckingDisabled"));
             return;
         }
         
@@ -31,11 +31,11 @@ public class PlayerEventListener implements Listener, BaseClass {
 
         MojangUser user = UsernameValidator.getUser(player);
 
-        BetterWhitelistBungee.getInstance().getLogger().info(String.format(getConfig().getString("lang.checkingUuid"), user.id));
+        BetterWhitelistBungee.getInstance().getLogger().info(String.format(getConfig().getString("lang.console.postLogin.checkingUuid"), user.id));
 
         if (getSQL().getDiscordIDFromMinecraft(user.id) == null) {
         	// User is not whitelisted.
-        	player.disconnect(new TextComponent(ChatColor.RED + getConfig().getString("lang.disconnectMessage")));
+        	player.disconnect(new TextComponent(ChatColor.RED + getConfig().getString("lang.player.disconnectMessage")));
         }
     }
 }

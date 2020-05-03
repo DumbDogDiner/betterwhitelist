@@ -67,7 +67,7 @@ public class SQL implements BaseClass {
      * Handle and print SQL errors to console.
      */
     private void handleSQLError(Exception e) {
-        getLogger().severe("Failed to execute SQL statement.");
+        getLogger().severe(getConfig().getString("lang.console.sql.handleSqlError"));
         e.printStackTrace();
 
     }
@@ -76,7 +76,7 @@ public class SQL implements BaseClass {
      * Check that the SQL table storing player UUIDs is valid.
      */
     public void checkTable() {
-        getLogger().info("[sql] Checking the UUID table is valid...");
+        getLogger().info("[SQL] " + getConfig().getString("lang.console.sql.checkTable"));
 
         try {
         	createAndExecUpdate("CREATE TABLE IF NOT EXISTS `minecraft_whitelist` (`discordID` VARCHAR(20),`minecraft_uuid` VARCHAR(36));");
@@ -95,7 +95,7 @@ public class SQL implements BaseClass {
             return;
         }
 
-        getLogger().info("[sql] Upgrading table...");
+        getLogger().info("[SQL] " + getConfig().getString("lang.console.sql.upgradingTable"));
 
         try {
         	createAndExecUpdate("ALTER TABLE `minecraft_whitelist` RENAME COLUMN `discordID` TO `discord_id`");
@@ -190,7 +190,7 @@ public class SQL implements BaseClass {
         try {
         	createAndExecUpdate("INSERT IGNORE INTO `minecraft_whitelist` (`discordID`, `minecraft_uuid`) VALUES ('" + discordID + "','" + uuid + "');");
 
-            getLogger().info("Added whitelist entry: '" + discordID + "' => '" + uuid + "'");
+            getLogger().info("[SQL] " + String.format(getConfig().getString("lang.console.sql.addEntry"), discordID, uuid));
 
             return true;
         }
@@ -209,14 +209,14 @@ public class SQL implements BaseClass {
     public boolean removeEntry(String discordID) {
         // Check to make sure entry exists to be removed.
         if (getUuidFromDiscordId(discordID) == null) {
-            getLogger().warning("Request to remove non-existent whitelist entry for ID '" + discordID + "'.");
+            getLogger().warning("[SQL] " + String.format(getConfig().getString("lang.console.sql.removeEntryPreWarning"), discordID));
             return false;
         }
 
         try {
         	createAndExecUpdate("DELETE FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
 
-            getLogger().info("Removed whitelist entry: '" + discordID + "'");
+            getLogger().info("[SQL] " + String.format(getConfig().getString("lang.console.sql.removeEntryPostInfo"), discordID));
 
             return true;
         }

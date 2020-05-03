@@ -43,7 +43,7 @@ public class PluginConfig implements BaseClass {
      * @return
      */
     public boolean saveConfig() {
-        getLogger().info("Saving configuration to disk...");
+        getLogger().info(getConfig().getString("lang.console.config.save"));
         return writeConfig(config);
     }
 
@@ -75,7 +75,7 @@ public class PluginConfig implements BaseClass {
 		try {
 			config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(loadResource("config.yml"));
 		} catch (IOException e) {
-			getLogger().severe("Error loading config.yml");
+	        getLogger().severe(getConfig().getString("lang.console.config.loadError"));
 		}
     }
     

@@ -51,17 +51,17 @@ public class WhitelistBot implements BaseClass {
         );
 
         getLogger().info(String.format(
-            "[discord] Have %d commands: %s",
+            "[discord] " + getConfig().getString("lang.console.discord.commands"),
             commands.size(),
             commands.values().stream().map(Command::getName).collect(Collectors.joining(", "))
         ));
 
-        builder.setActivity(Activity.watching("the cutest fuzzballs \uD83E\uDDE1"));
+        builder.setActivity(Activity.watching(getConfig().getString("lang.discordStatus")));
         try {
-            getLogger().info("[discord] Attempting connection to Discord...");
+            getLogger().info("[discord] " + getConfig().getString("lang.console.discord.attemptingConnection"));
             jda = builder.build();
         } catch (LoginException err) {
-            getLogger().severe("[discord] WhitelistBot threw an error while trying to authenticate with Discord.");
+            getLogger().severe("[discord] " + getConfig().getString("lang.console.discord.loginError"));
             err.printStackTrace();
         }
     }

@@ -70,7 +70,7 @@ public class BetterWhitelistBungee extends Plugin {
         // Close the SQL datasource.
         getSQL().ds.close();
         
-
-        getLogger().info("Aarrff!! (see you again soon :3)");
+        // Log a special message. :3
+        getLogger().info(getPluginConfig().getConfig().getString("lang.onDisable"));
     }
 }
