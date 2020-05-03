@@ -2,6 +2,8 @@ package com.dumbdogdiner.betterwhitelist.discord.listeners;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
 
+import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
+import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -45,10 +47,20 @@ public class MessageListener extends ListenerAdapter implements BaseClass {
             return;
         }
 
+        Command command = getBot().getCommands().get(commandName);
+
         getLogger().info(String.format("[discord] %s (%s) => %s", e.getAuthor().getAsTag(),e.getAuthor().getId(), commandName));
 
+        // Check for ratelimit.
+        if (RatelimitUtil.isRatelimited(getBot().getCommands().get(commandName), e.getAuthor())) {
+            e.getChannel().sendMessage(
+                    RatelimitUtil.getRatelimitMessage(command, e.getAuthor())
+            ).queue();
+            return;
+        }
+
         try {
-            getBot().getCommands().get(commandName).execute(e, args);
+           command.execute(e, args);
         } catch(Exception err) {
             getBot().getLogger().severe("Error in command '" + commandName + "':");
             err.printStackTrace();
@@ -58,5 +70,8 @@ public class MessageListener extends ListenerAdapter implements BaseClass {
                 err.getClass().getCanonicalName()
             )).queue();
        }
+
+        // Update ratelimit data.
+        RatelimitUtil.userDidRunCommand(command, e.getAuthor());
     }
 }

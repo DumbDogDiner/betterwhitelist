@@ -10,6 +10,7 @@ import com.dumbdogdiner.betterwhitelist.discord.listeners.GuildEventListener;
 import com.dumbdogdiner.betterwhitelist.discord.listeners.MessageListener;
 import com.dumbdogdiner.betterwhitelist.discord.listeners.ReadyListener;
 
+import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -20,6 +21,7 @@ import javax.security.auth.login.LoginException;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +51,9 @@ public class WhitelistBot implements BaseClass {
             new UnwhitelistCommand(),
             new HelpCommand()
         );
+
+        // Register ratelimit task
+        getProxy().getScheduler().schedule(getInstance(), RatelimitUtil::cleanRatelimits, 1, TimeUnit.HOURS);
 
         getLogger().info(String.format(
             "[discord] " + getConfig().getString("lang.console.discord.commands"),

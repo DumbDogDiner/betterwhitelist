@@ -2,6 +2,7 @@ package com.dumbdogdiner.betterwhitelist.discord.commands;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
+import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 import com.dumbdogdiner.betterwhitelist.discord.utils.RoleUtil;
 import com.dumbdogdiner.betterwhitelist.utils.MojangUser;
 import com.dumbdogdiner.betterwhitelist.utils.UsernameValidator;
@@ -14,6 +15,9 @@ public class WhitelistCommand extends Command implements BaseClass {
         this.name = "whitelist";
         this.description = "Add yourself to the whitelist of the Minecraft server.";
         this.syntax = "<username>";
+
+        // Require ratelimit
+        RatelimitUtil.registerRateLimit(this, 5.0);
     }
 
     @Override
