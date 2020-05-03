@@ -2,6 +2,8 @@ package com.dumbdogdiner.betterwhitelist.utils;
 
 import com.google.gson.Gson;
 
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,6 +33,21 @@ public class UsernameValidator {
         result.id = hyphenateUUID(result.id);
 
         return result;
+    }
+    
+    /**
+     * Create a MojangUser instance from ProxiedPlayer data.
+     * 
+     * @param ProxiedPlayer instance.
+     * @return Mojang API user object.
+     */
+    public static MojangUser getUser(ProxiedPlayer player) {
+    	MojangUser result = new MojangUser();
+    	
+    	result.id = hyphenateUUID(player.getUniqueId().toString());
+    	result.name = player.getName();
+    	
+    	return result;
     }
 
     /**

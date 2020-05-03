@@ -51,6 +51,7 @@ public class BetterWhitelistBungee extends Plugin {
         PluginManager manager = getProxy().getPluginManager();
 
         manager.registerListener(this, new PlayerEventListener());
+        
         manager.registerCommand(this, new WhoisCommand());
         manager.registerCommand(this, new WhitelistCommand());
         manager.registerCommand(this, new UnwhitelistCommand());

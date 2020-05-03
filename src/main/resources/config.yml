@@ -10,19 +10,15 @@ mysql:
   username: "root"
   password: "password"
 
-# Add player overrides
-overrides:
-  - skyefoxie
-
 discord:
   # Bot token the plugin should use.
-  token: 'discord token here'
+  token: "discord token here"
 
   # The ID of the guild you want the bot to listen in.
-  guildId: 'guild id here'
+  guildId: "guild id here"
 
   # The prefix the bot should use.
-  prefix: '-'
+  prefix: "-"
 
   # Whether users are able to run the `-minecraft <username>` command
   # and verify themselves.
@@ -40,11 +36,15 @@ discord:
     # The role users are required to have to be able to be whitelisted.
     requiredRole:
       enabled: false
-      roleId: 'required role id here'
+      roleId: "required role id here"
 
     # The role users are granted once whitelisted.
     grantedRole:
       enabled: false
       silent: false
-      roleId: ''
+      roleId: ""
 
+lang:
+  disconnectMessage: "You are not whitelisted on this network!"
+  uuidCheckingDisabled: "Skipping handling new player connection - checking disabled."
+  checkingUuid: "Checking that UUID '%s' is whitelisted..."
