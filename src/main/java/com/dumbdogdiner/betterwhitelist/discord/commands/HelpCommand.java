@@ -18,7 +18,7 @@ public class HelpCommand extends Command implements BaseClass {
     @Override
     public void run(MessageReceivedEvent e, String... args) {
         e.getChannel().sendMessage(String.format(
-                "**Aarrff!!** BetterWhitelist `v%s`\n\nAvailable Commands:\n - %s",
+                getConfig().getString("lang.discord.help"),
                 BetterWhitelistBungee.getInstance().getDescription().getVersion(),
                 getBot().getCommands().values().stream().map(this::formatCommandInfo).collect(Collectors.joining("\n - "))
         )).queue();

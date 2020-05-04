@@ -22,8 +22,9 @@ public class MessageListener extends ListenerAdapter implements BaseClass {
             return;
         }
 
-        if (e.getMessage().isMentioned(getBot().getJDA().getSelfUser())) {
-            e.getChannel().sendMessage("**Hai!! ^w^** My prefix is `" + prefix + "`.").queue();
+        // If bot user was mentioned, but not via @everyone
+        if (e.getMessage().isMentioned(getBot().getJDA().getSelfUser()) && !e.getMessage().mentionsEveryone()) {
+            e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.mentioned"), prefix)).queue();
             return;
         }
 
@@ -39,9 +40,7 @@ public class MessageListener extends ListenerAdapter implements BaseClass {
         args = Arrays.copyOfRange(args, 1, args.length);
 
         if (!getBot().getCommands().containsKey(commandName)) {
-            e.getChannel()
-                    .sendMessage(":x: **Oops!** Unknown command `" + commandName + "` - do `" + prefix + "help` for a list of commands.")
-                    .queue();
+            e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.unknownCommand"), commandName, prefix)).queue();
             return;
         }
 
@@ -50,11 +49,12 @@ public class MessageListener extends ListenerAdapter implements BaseClass {
         try {
             getBot().getCommands().get(commandName).execute(e, args);
         } catch(Exception err) {
+        	// Not *really* any point to localise imo, but feel free to do so if you please :)
             getBot().getLogger().severe("Error in command '" + commandName + "':");
             err.printStackTrace();
 
             e.getChannel().sendMessage(String.format(
-                ":x: **Whoops!** Internal error - please ask a dev to take a look. (`%s`)",
+            	getConfig().getString("lang.discord.internalError"),
                 err.getClass().getCanonicalName()
             )).queue();
        }
