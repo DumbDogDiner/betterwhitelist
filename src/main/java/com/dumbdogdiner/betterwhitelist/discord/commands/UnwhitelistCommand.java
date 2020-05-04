@@ -29,28 +29,23 @@ public class UnwhitelistCommand extends Command implements BaseClass {
         if (e.getMessage().getMentionedMembers().size() > 0) {
             Member member = e.getMessage().getMentionedMembers().get(0);
             if (!Objects.requireNonNull(e.getMember()).canInteract(member)) {
-                e.getChannel()
-                        .sendMessage(
-                                ":x: You do not have the required permissions to remove this user from the whitelist.")
-                        .queue();
+                e.getChannel().sendMessage(getConfig().getString("lang.discord.userRemovedPermissionError")).queue();
                 return;
             }
             target = member;
         }
 
         if (target == null) {
-            e.getChannel().sendMessage(":x: Unable to find user.").queue();
+            e.getChannel().sendMessage(getConfig().getString("lang.discord.userRemovedNotFoundError")).queue();
             return;
         }
 
         if (getSQL().removeEntry(target.getId())) {
             e.getChannel().sendMessage(
-                    ":white_check_mark: User `" + target.getUser().getAsTag() + "` was removed from the whitelist.")
+            		String.format(getConfig().getString("lang.discord.userRemoved"), target.getUser().getAsTag()))
                     .queue(message -> RoleUtil.removeGrantedRole(e));
         } else {
-            e.getChannel().sendMessage(
-                    ":x: **Could not remove user from the whitelist!** Perhaps they aren't on it to begin with?")
-                    .queue();
+            e.getChannel().sendMessage(getConfig().getString("lang.discord.userRemovedError")).queue();
         }
     }
 }

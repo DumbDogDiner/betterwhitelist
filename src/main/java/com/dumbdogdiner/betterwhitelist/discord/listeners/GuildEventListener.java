@@ -21,14 +21,12 @@ import java.util.UUID;
 public class GuildEventListener extends ListenerAdapter implements BaseClass {
     @Override
     public void onGuildMemberLeave(@Nonnull GuildMemberLeaveEvent e) {
-        disconnectWithMessage(e.getUser().getId(), ChatColor.RED + "You have left " + e.getGuild().getName()
-                + " and have been removed from the whitelist!");
+        disconnectWithMessage(e.getUser().getId(), ChatColor.RED + String.format(getConfig().getString("lang.player.guildMemberLeave"), e.getGuild().getName()));
     }
 
     @Override
     public void onGuildBan(GuildBanEvent e) {
-        disconnectWithMessage(e.getUser().getId(), ChatColor.RED + "You were banned from " + e.getGuild().getName()
-                + " and have been removed from the whitelist!");
+        disconnectWithMessage(e.getUser().getId(), ChatColor.RED + String.format(getConfig().getString("lang.player.guildBan"), e.getGuild().getName()));
     }
 
     /**
@@ -39,8 +37,7 @@ public class GuildEventListener extends ListenerAdapter implements BaseClass {
      */
     private void disconnectWithMessage(String id, String message) {
         if (!getConfig().getBoolean("discord.enableBanSync")) {
-            getLogger()
-                    .info("[discord] Not removing user '" + id + "' from whitelist - enableBanSync=false");
+        	getLogger().info("[discord] " + String.format(getConfig().getString("lang.console.discord.banSyncDisabledWarning"), id));
             return;
         }
 
@@ -55,12 +52,11 @@ public class GuildEventListener extends ListenerAdapter implements BaseClass {
             return;
         }
 
-        getLogger().info("[discord][ban] Disconnecting player if they are still online...");
+        getLogger().info("[discord][ban] " + getConfig().getString("lang.console.discord.disconnectingIfStillOnline"));
         player.disconnect(new TextComponent(message));
 
         if (getSQL().removeEntry(id)) {
-            getLogger()
-                    .info("[discord][ban] Removed user with Discord ID '" + id + "' from the whitelist.");
+            getLogger().info("[discord][ban] " + String.format(getConfig().getString("lang.console.discord.userRemoved"), id));
         }
     }
 }

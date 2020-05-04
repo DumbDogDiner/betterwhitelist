@@ -15,7 +15,7 @@ public class GetStatusCommand extends Command implements BaseClass {
     @Override
     public void run(MessageReceivedEvent e, String... args) {
         e.getChannel().sendMessage(String.format(
-            "**Meep!! ^w^**\n> Ping: `%dms`",
+            getConfig().getString("lang.discord.status"),
             Math.round(getBot().getJDA().getGatewayPing()
         ))).queue();
     }

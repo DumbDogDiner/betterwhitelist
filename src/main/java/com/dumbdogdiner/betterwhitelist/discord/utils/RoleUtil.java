@@ -52,7 +52,7 @@ public class RoleUtil implements BaseClass {
 
                 // If the role doesn't exist, inform the user that something went wrong.
                 if (role == null || member == null) {
-                	getBase().getLogger().warning("[discord] Unable to retrieve grantedRole '" + roleId + "'.");
+                	getBase().getLogger().warning("[discord] " + String.format(getBase().getConfig().getString("lang.console.discord.grantedRoleError"), roleId));
                     sendRoleAddErrorMessage(e);
                     return;
                 }
@@ -67,7 +67,7 @@ public class RoleUtil implements BaseClass {
 
                 // Tell users they have been granted the role.
                 if (!getBase().getConfig().getBoolean("discord.roles.grantedRole.silent")) {
-                    e.getChannel().sendMessage(":inbox_tray: You were also granted the **" + role.getName() + "** role!").queue();
+                    e.getChannel().sendMessage(String.format(getBase().getConfig().getString("lang.discord.grantedRole"), role.getName())).queue();
                 }
             } catch(Exception err) {
                 err.printStackTrace();
@@ -81,10 +81,7 @@ public class RoleUtil implements BaseClass {
      * @param e
      */
     public static void sendRoleAddErrorMessage(MessageReceivedEvent e) {
-        e.getChannel()
-                .sendMessage(":warning: You are also supposed to be granted a role," +
-                        "but something went wrong while I was trying to add it to you. Please contact an admin so they can add it for you!")
-                .queue();
+        e.getChannel().sendMessage(getBase().getConfig().getString("lang.discord.roleAddError")).queue();
     }
 
     /**
@@ -100,7 +97,8 @@ public class RoleUtil implements BaseClass {
 
                 // If the role doesn't exist, inform the user that something went wrong.
                 if (role == null || member == null) {
-                	getBase().getLogger().warning("[discord] Unable to retrieve grantedRole '" + roleId + "'.");
+                	// same call twice, fyi.
+                	getBase().getLogger().warning("[discord] " + String.format(getBase().getConfig().getString("lang.console.discord.grantedRoleError"), roleId));
                     return;
                 }
 

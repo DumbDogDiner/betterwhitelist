@@ -49,9 +49,13 @@ lang:
   
   discordStatus: "the cutest fuzzballs \uD83E\uDDE1"
   
+  # lang.player - Minecraft player/console messages.
   player:
     disconnectMessage: "You are not whitelisted on this network!"
+    guildMemberLeave: "You have left %s and have been removed from the whitelist!"
+    guildBan: "You were banned from %s and have been removed from the whitelist!"
   
+  # lang.console - Minecraft Console-only messages.
   console:
     postLogin:
       uuidCheckingDisabled: "Skipping handling new player connection - checking disabled."
@@ -73,3 +77,39 @@ lang:
       commands: "Have %d commands: %s"
       attemptingConnection: "Attempting connection to Discord..."
       loginError: "WhitelistBot threw an error while trying to authenticate with Discord."
+      grantedRoleError: "Unable to retrieve grantedRole '%s'."
+      banSyncDisabledWarning: "Not removing user '%s' from whitelist - enableBanSync=false"
+      disconnectingIfStillOnline: "Disconnecting player if they are still online..."
+      userRemoved: "Removed user with Discord ID '%s' from the whitelist."
+      
+  
+  # lang.discord - Discord messages
+  discord:
+    mentioned: "**Hai!! ^w^** My prefix is `%s`."
+    unknownCommand: ":x: **Oops!** Unknown command `%s` - do `%shelp` for a list of commands."
+    internalError: ":x: **Whoops!** Internal error - please ask a dev to take a look. (`%s`)"
+    
+    grantedRole: ":inbox_tray: You were also granted the **%s** role!"
+    roleAddError: ":warning: You are also supposed to be granted a role, but something went wrong while I was trying to add it to you. Please contact an admin so they can add it for you!"
+    
+    # Whitelist Command
+    selfWhitelistingDisabled: ":x: **Self-whitelisting has been disabled.**"
+    missingRequiredRole: ":x: **Whoops!** You don't have the role needed to be able to self-whitelist."
+    usernameNotSpecified: ":x: **Whoops!** You didn't specify your MC username. Make sure you run the command in the format `%swhitelist <username>`."
+    alreadyWhitelisted: ":x: **Failed to verify!** You already have a Minecraft account whitelisted - you can unwhitelist it by running `%sunwhitelist`."
+    invalidUsername: ":x: **Failed to verify!** Invalid Username - did you make a typo somewhere?"
+    userAddError: ":x: **Failed to add you to whitelist!** Please contact a dev so they can manually add you. (`SQL_ERROR`)"
+    userWhitelisted: ":white_check_mark: Whitelisted user **%s**! (`%s`)"
+    
+    # Unwhitelist Command
+    userRemoved: ":white_check_mark: User `%s` was removed from the whitelist."
+    userRemovedError: ":x: **Could not remove user from the whitelist!** Perhaps they aren't on it to begin with?"
+    userRemovedNotFoundError: ":x: Unable to find user."
+    userRemovedPermissionError: ":x: You do not have the required permissions to remove this user from the whitelist."
+    
+    # Help Command
+    help: "**Aarrff!!** BetterWhitelist `v%s`\n\nAvailable Commands:\n - %s"
+    
+    # Status Command
+    status: "**Meep!! ^w^**\n> Ping: `%dms`"
+    
