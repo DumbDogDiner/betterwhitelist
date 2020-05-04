@@ -48,6 +48,9 @@ gradle-app.setting
 # Eclipse 2020
 .settings/
 
+# IntelliJ
+.idea/
+
 # Extra gitignores
 **/.gitignore
 
