@@ -5,9 +5,9 @@ import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * SQL wrapper for fetching/storing user whitelist data.
@@ -30,6 +30,9 @@ public class SQL implements BaseClass {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("userServerPrepStmts", "true");
+        
+        config.setMaximumPoolSize(32);
 
         ds = new HikariDataSource(config);
         
@@ -37,30 +40,23 @@ public class SQL implements BaseClass {
     }
     
     private void createAndExecUpdate(String request) throws SQLException {
-    	Statement statement = ds.getConnection().createStatement();
+    	PreparedStatement pt = ds.getConnection().prepareStatement(request);
     	
-    	statement.executeUpdate(request);
+    	pt.executeUpdate();
     	
-    	statement.getConnection().close();
+    	pt.close();
+    	pt.getConnection().close();
     }
     
-    private QueryResponse createAndExecQuery(String request) throws SQLException {
-    	Statement statement = ds.getConnection().createStatement();
+    private ResultSet createAndExecQuery(String request) throws SQLException {
+    	PreparedStatement pt = ds.getConnection().prepareStatement(request);
     	
-    	ResultSet result = statement.executeQuery(request);
+    	ResultSet result = pt.executeQuery();
     	
-    	return new QueryResponse(result, statement);
-    }
-    
-    private class QueryResponse {
+    	pt.close();
+    	pt.getConnection().close();
     	
-    	public ResultSet result;
-		public Statement statement;
-
-    	private QueryResponse (ResultSet result, Statement statement) {
-    		this.result = result;
-    		this.statement = statement;
-    	}
+    	return result;
     }
 
     /**
@@ -110,7 +106,7 @@ public class SQL implements BaseClass {
     private boolean checkIfUpgradeable() {
 
         try {
-        	ResultSet result = createAndExecQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`").result;
+        	ResultSet result = createAndExecQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`");
 
             while (result.next()) {
                 if (result.getString(1) == "discord_id") {
@@ -133,12 +129,11 @@ public class SQL implements BaseClass {
      */
     public String getDiscordIDFromMinecraft(String uuid) {
         try {
-        	QueryResponse res = createAndExecQuery("SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
+        	ResultSet res = createAndExecQuery("SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
 
             // Return the first result.
-            while (res.result.next()) {
-                String id = res.result.getString(1);
-                res.statement.getConnection().close();
+            while (res.next()) {
+                String id = res.getString(1);
                 return id;
             }
 
@@ -160,11 +155,10 @@ public class SQL implements BaseClass {
      */
     public String getUuidFromDiscordId(String discordID) {
         try {
-        	QueryResponse res = createAndExecQuery("SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
+        	ResultSet res = createAndExecQuery("SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
         	
-            if (res.result.next()) {
-                String uuid = res.result.getString(1);
-                res.statement.getConnection().close();
+            if (res.next()) {
+                String uuid = res.getString(1);
 
                 // BetterWhitelistBungee.getInstance().getLogger().info("Got '" + uuid + "' for
                 // ID '" + discordID + "'.");
