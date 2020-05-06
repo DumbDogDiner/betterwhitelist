@@ -20,6 +20,10 @@ node('docker-cli') {
       archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
 				
       ghSetStatus("The build passed.", "success", "ci")
+	  
+      // Linting
+      def checkstyle = scanForIssues tool: checkStyle(pattern: 'build/reports/checkstyle/main.xml')
+      publishIssues issues: [checkstyle]
     }
   }
 }

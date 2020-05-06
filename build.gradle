@@ -11,6 +11,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'checkstyle'
 }
 
 group 'com.dumbdogdiner'
@@ -52,9 +53,20 @@ shadowJar {
     minimize()
 }
 
+
 apply plugin: 'java'
 
 // Bugfix for no referenced libraries when using Eclipse.
 apply plugin: 'eclipse'
 
 apply plugin: 'com.github.johnrengelman.shadow'
+
+checkstyle {
+    toolVersion "8.32"
+    configFile file("${project.rootDir}/.checkstyle.xml")
+    // ignoreFailures = false
+}
+
+checkstyleMain {
+    source ='src/main/java'
+}
