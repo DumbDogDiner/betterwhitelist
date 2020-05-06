@@ -44,19 +44,32 @@ public class SQL implements BaseClass {
     	
     	pt.executeUpdate();
     	
-    	pt.close();
-    	pt.getConnection().close();
+    	pt.getConnection().close(); // close the DB connection
+    	pt.close(); // close the statement (removes ResultSet if there)
     }
     
-    private ResultSet createAndExecQuery(String request) throws SQLException {
+    private QueryResponse createAndExecQuery(String request) throws SQLException {
     	PreparedStatement pt = ds.getConnection().prepareStatement(request);
     	
     	ResultSet result = pt.executeQuery();
     	
-    	pt.close();
-    	pt.getConnection().close();
+    	// remember to exec QueryResponse.closeAll() once all ResultSet operations are done! :)
+    	return new QueryResponse(result, pt);
+    }
+    
+    private class QueryResponse {
+    	public ResultSet result;
+		public PreparedStatement statement;
+
+    	private QueryResponse (ResultSet result, PreparedStatement statement) {
+    		this.result = result;
+    		this.statement = statement;
+    	}
     	
-    	return result;
+    	private void closeAll() throws SQLException {
+    		statement.getConnection().close(); // close the DB connection
+    		statement.close() ;// close the statement (removes ResultSet if there)
+    	}
     }
 
     /**
@@ -106,12 +119,16 @@ public class SQL implements BaseClass {
     private boolean checkIfUpgradeable() {
 
         try {
-        	ResultSet result = createAndExecQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`");
+        	QueryResponse res = createAndExecQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`");
 
-            while (result.next()) {
-                if (result.getString(1) == "discord_id") {
+            while (res.result.next()) {
+                if (res.result.getString(1) == "discord_id") {
+                	res.closeAll();
+                	
                     return true;
                 }
+                
+                res.closeAll();
             }
 
             return false;
@@ -129,13 +146,18 @@ public class SQL implements BaseClass {
      */
     public String getDiscordIDFromMinecraft(String uuid) {
         try {
-        	ResultSet res = createAndExecQuery("SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
+        	QueryResponse res = createAndExecQuery("SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
 
             // Return the first result.
-            while (res.next()) {
-                String id = res.getString(1);
+            while (res.result.next()) {
+                String id = res.result.getString(1);
+                
+                res.closeAll();
+                
                 return id;
             }
+            
+            res.closeAll();
 
             // If not found, return null.
             return null;
@@ -155,15 +177,18 @@ public class SQL implements BaseClass {
      */
     public String getUuidFromDiscordId(String discordID) {
         try {
-        	ResultSet res = createAndExecQuery("SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
+        	QueryResponse res = createAndExecQuery("SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
         	
-            if (res.next()) {
-                String uuid = res.getString(1);
+            if (res.result.next()) {
+                String uuid = res.result.getString(1);
+                
+                res.closeAll();
 
                 // BetterWhitelistBungee.getInstance().getLogger().info("Got '" + uuid + "' for
                 // ID '" + discordID + "'.");
                 return uuid;
             }
+            res.closeAll();
 
             return null;
         }
