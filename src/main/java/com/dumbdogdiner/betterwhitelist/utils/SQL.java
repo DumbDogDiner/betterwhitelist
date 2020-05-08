@@ -5,9 +5,9 @@ import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * SQL wrapper for fetching/storing user whitelist data.
@@ -19,6 +19,17 @@ public class SQL implements BaseClass {
             getConfig().getString("mysql.database"));
 
     public final HikariDataSource ds;
+    
+    private final ConfigMXBean configMx;
+    private final PoolMXBean poolMx;
+    
+    public ConfigMXBean getConfigMXBean() {
+    	return configMx;
+    }
+    
+    public PoolMXBean getPoolMXBean() {
+    	return poolMx;
+    }
 
     public SQL() {
         // Create and configure SQL configuration.
@@ -30,36 +41,55 @@ public class SQL implements BaseClass {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("userServerPrepStmts", "true");
+        
+        // Enable MBeans for JMX Monitoring / Management
+        config.setRegisterMbeans(true);
+        
+        // Set a pool name.
+        config.setPoolName("BetterwhitelistBungeePool-1");
+        
+        // Increase the maximum pool size.
+        config.setMaximumPoolSize(32);
 
         ds = new HikariDataSource(config);
+        
+        configMx = new ConfigMXBean(ds.getHikariConfigMXBean());
+        poolMx = new PoolMXBean(ds.getHikariPoolMXBean());
         
         checkTable();
     }
     
     private void createAndExecUpdate(String request) throws SQLException {
-    	Statement statement = ds.getConnection().createStatement();
+    	PreparedStatement pt = ds.getConnection().prepareStatement(request);
     	
-    	statement.executeUpdate(request);
+    	pt.executeUpdate();
     	
-    	statement.getConnection().close();
+    	pt.getConnection().close(); // close the DB connection
+    	pt.close(); // close the statement (removes ResultSet if there)
     }
     
     private QueryResponse createAndExecQuery(String request) throws SQLException {
-    	Statement statement = ds.getConnection().createStatement();
+    	PreparedStatement pt = ds.getConnection().prepareStatement(request);
     	
-    	ResultSet result = statement.executeQuery(request);
+    	ResultSet result = pt.executeQuery();
     	
-    	return new QueryResponse(result, statement);
+    	// remember to exec QueryResponse.closeAll() once all ResultSet operations are done! :)
+    	return new QueryResponse(result, pt);
     }
     
     private class QueryResponse {
-    	
     	public ResultSet result;
-		public Statement statement;
+		public PreparedStatement statement;
 
-    	private QueryResponse (ResultSet result, Statement statement) {
+    	private QueryResponse (ResultSet result, PreparedStatement statement) {
     		this.result = result;
     		this.statement = statement;
+    	}
+    	
+    	private void closeAll() throws SQLException {
+    		statement.getConnection().close(); // close the DB connection
+    		statement.close() ;// close the statement (removes ResultSet if there)
     	}
     }
 
@@ -110,12 +140,16 @@ public class SQL implements BaseClass {
     private boolean checkIfUpgradeable() {
 
         try {
-        	ResultSet result = createAndExecQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`").result;
+        	QueryResponse res = createAndExecQuery("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `minecraft_whitelist`");
 
-            while (result.next()) {
-                if (result.getString(1) == "discord_id") {
+            while (res.result.next()) {
+                if (res.result.getString(1) == "discord_id") {
+                	res.closeAll();
+                	
                     return true;
                 }
+                
+                res.closeAll();
             }
 
             return false;
@@ -138,9 +172,13 @@ public class SQL implements BaseClass {
             // Return the first result.
             while (res.result.next()) {
                 String id = res.result.getString(1);
-                res.statement.getConnection().close();
+                
+                res.closeAll();
+                
                 return id;
             }
+            
+            res.closeAll();
 
             // If not found, return null.
             return null;
@@ -164,12 +202,14 @@ public class SQL implements BaseClass {
         	
             if (res.result.next()) {
                 String uuid = res.result.getString(1);
-                res.statement.getConnection().close();
+                
+                res.closeAll();
 
                 // BetterWhitelistBungee.getInstance().getLogger().info("Got '" + uuid + "' for
                 // ID '" + discordID + "'.");
                 return uuid;
             }
+            res.closeAll();
 
             return null;
         }

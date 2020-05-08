@@ -41,16 +41,24 @@ public class WhitelistCommand extends Command implements BaseClass {
 
         e.getChannel().sendTyping().queue();
 
-        if (getSQL().getUuidFromDiscordId(e.getAuthor().getId()) != null
-                && getConfig().getBoolean("discord.oneAccountPerUser")) {
+        // If the user has already whitelisted an account, and 'oneAccountPerUser' is enabled, show an error.
+        if (getSQL().getUuidFromDiscordId(e.getAuthor().getId()) != null && getConfig().getBoolean("discord.oneAccountPerUser")) {
             e.getChannel().sendMessage(
-            		String.format(getConfig().getString("lang.discord.alreadyWhitelisted"), getPluginConfig().getPrefix()))
+            		String.format(getConfig().getString("lang.discord.alreadyWhitelistedOneUserOnly"), getPluginConfig().getPrefix()))
                     .queue();
             return;
         }
 
         MojangUser user = UsernameValidator.getUser(args[0]);
+        
+        
+        // If the specified Minecraft username is already whitelisted, show an error.
+        if (getSQL().getDiscordIDFromMinecraft(user.id) != null) {
+        	e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.minecraftAccountAlreadyWhitelisted"), user.name)).queue();
+        	return;
+        }
 
+        // If the specified Minecraft user could not be resolved to an UUID (b/c the account does not exist), show an error.
         if (user == null || user.id == null) {
             e.getChannel().sendMessage(getConfig().getString("lang.discord.invalidUsername")).queue();
             return;
@@ -58,10 +66,12 @@ public class WhitelistCommand extends Command implements BaseClass {
 
         // Add user to SQL.
         if (!getSQL().addEntry(e.getAuthor().getId(), user.id)) {
+        	// If there is an error, display it.
             e.getChannel().sendMessage(getConfig().getString("lang.discord.userAddError")).queue();
             return;
         }
 
+        // Send a success message.
         e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.userWhitelisted"), user.name, user.id))
                 .queue(message -> RoleUtil.addGrantedRole(e));
     }
