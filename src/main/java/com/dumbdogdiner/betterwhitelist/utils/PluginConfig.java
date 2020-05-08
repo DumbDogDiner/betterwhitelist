@@ -19,6 +19,14 @@ public class PluginConfig implements BaseClass {
 
     public PluginConfig() {
     	loadConfig();
+    	
+		if (config.getInt("version") != 2) {
+			getLogger().info("Version 1 (<2.2.0) file detected! Attempting to migrate...");
+			migrateV1();
+			getLogger().info("Migration completed!");
+			
+			loadConfig();
+		}
     }
     
     private Configuration config;
@@ -101,4 +109,60 @@ public class PluginConfig implements BaseClass {
             }
             return resourceFile;
         }
+    
+    private Configuration getNewInternalConfiguration() throws IOException {
+    	File file = File.createTempFile("betterwhitelist", "bt");
+			
+		InputStream in = this.getResourceAsStream("config.yml");
+		OutputStream out = new FileOutputStream(file);
+		ByteStreams.copy(in, out);
+			
+		Configuration conf = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
+			
+		return conf;
+    }
+    
+    private void migrateV1() {
+    	try {
+    		Configuration newConf = getNewInternalConfiguration();
+    		
+    		String[] data = {
+    				"enableSql",
+    				"disableUuidChecking",
+    				"mysql.host",
+    				"mysql.database",
+    				"mysql.port",
+    				"mysql.username",
+    				"mysql.password",
+    				"overrides",
+    				"discord.token",
+    				"discord.guildId",
+    				"discord.prefix",
+    				"discord.enableSelfWhitelisting",
+    				"discord.enableBanSync",
+    				"discord.oneAccountPerUser",
+    				"discord.roles.requiredRole.enabled",
+    				"discord.roles.requiredRole.roleId",
+    				"discord.roles.grantedRole.enabled",
+    				"discord.roles.grantedRole.silent",
+    				"discord.roles.grantedRole.roleId"
+    			};
+    		
+    		
+    		// Migrate the data.
+    		newConf = ValueMigrator(newConf, data);
+    		
+    		// Newconf now contains all new defaults + old data, now write it.
+    		writeConfig(newConf);
+    		
+    	} catch (IOException ex) {
+    		getLogger().severe("[config] [migration] Failed to migrate!\n" + ex);
+    	}
+    }
+    
+    public Configuration ValueMigrator(Configuration newConfig, String[] data) {
+    	for (String item : data) newConfig.set(item, getConfig().get(item));
+    	return newConfig;
+    		
+    }
 }

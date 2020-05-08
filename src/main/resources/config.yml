@@ -1,3 +1,6 @@
+# No changing! >:(
+version: 2
+
 ## Whether to disable checking for player UUIDs on join.
 disableUuidChecking: false
 
@@ -112,8 +115,8 @@ lang:
     userRemovedPermissionError: ":x: You do not have the required permissions to remove this user from the whitelist."
     
     # Help Command
-    help: "**Aarrff!!** BetterWhitelist `v%s`\\n\\nAvailable Commands:\\n - %s"
+    help: "**Aarrff!!** BetterWhitelist `v%s`#n#nAvailable Commands:#n - %s"
     
     # Status Command
-    status: "**Meep!! ^w^**\\n> Ping: `%dms`"
+    status: "**Meep!! ^w^**#n> Ping: `%dms`"
     
