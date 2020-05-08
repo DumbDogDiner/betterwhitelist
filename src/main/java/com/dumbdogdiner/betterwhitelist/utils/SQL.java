@@ -19,6 +19,17 @@ public class SQL implements BaseClass {
             getConfig().getString("mysql.database"));
 
     public final HikariDataSource ds;
+    
+    private final ConfigMXBean configMx;
+    private final PoolMXBean poolMx;
+    
+    public ConfigMXBean getConfigMXBean() {
+    	return configMx;
+    }
+    
+    public PoolMXBean getPoolMXBean() {
+    	return poolMx;
+    }
 
     public SQL() {
         // Create and configure SQL configuration.
@@ -32,9 +43,18 @@ public class SQL implements BaseClass {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         config.addDataSourceProperty("userServerPrepStmts", "true");
         
+        // Enable MBeans for JMX Monitoring / Management
+        config.setRegisterMbeans(true);
+        
+        // Set a pool name.
+        config.setPoolName("BetterwhitelistBungeePool-1");
+        
         config.setMaximumPoolSize(32);
 
         ds = new HikariDataSource(config);
+        
+        configMx = new ConfigMXBean(ds.getHikariConfigMXBean());
+        poolMx = new PoolMXBean(ds.getHikariPoolMXBean());
         
         checkTable();
     }

@@ -19,6 +19,9 @@ discord:
 
   # The prefix the bot should use.
   prefix: "-"
+  
+  # The ID of the guild text channel that debug commands are allowed to be run from.
+  debugChannelId: "12345678"
 
   # Whether users are able to run the `-minecraft <username>` command
   # and verify themselves.

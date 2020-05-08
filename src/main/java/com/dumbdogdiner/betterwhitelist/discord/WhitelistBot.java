@@ -1,6 +1,7 @@
 package com.dumbdogdiner.betterwhitelist.discord;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.discord.commands.DebugCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.GetStatusCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.HelpCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.UnwhitelistCommand;
@@ -14,6 +15,9 @@ import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
@@ -28,6 +32,8 @@ import java.util.stream.Collectors;
 public class WhitelistBot implements BaseClass {
 	
 	private JDA jda;
+	
+	public Long debugTextChannelId;
 
     public WhitelistBot() {
     	// constructor
@@ -44,6 +50,7 @@ public class WhitelistBot implements BaseClass {
 
         // Register Commands
         addCommand(
+        	new DebugCommand(),
             new GetStatusCommand(),
             new WhitelistCommand(),
             new UnwhitelistCommand(),
@@ -55,8 +62,27 @@ public class WhitelistBot implements BaseClass {
             commands.size(),
             commands.values().stream().map(Command::getName).collect(Collectors.joining(", "))
         ));
+        
+        // Create a listener to log debug channel information when JDA has connected.
+        builder.addEventListeners(new ListenerAdapter() {
+        	@Override
+        	public void onReady(ReadyEvent event) {
+        		
+        		// Debug Channel logging. - default to '0' to avoid an IllegalArgumentException by JDA.
+                TextChannel debugTextChannel = jda.getTextChannelById(getConfig().getString("discord.debugChannelId", "0"));
+
+                if (debugTextChannel != null) {
+                	getLogger().info("[discord] [debug] Debug command listening on: #" + debugTextChannel.getName() + " <#" + debugTextChannel.getId() + ">");
+                	debugTextChannelId = debugTextChannel.getIdLong();
+                } else {
+                	// invalid channel ID.
+                	getLogger().warning("[discord] [debug] Invalid text channel, check config!");
+                }
+        	}
+        });
 
         builder.setActivity(Activity.watching(getConfig().getString("lang.discordStatus")));
+        
         try {
             getLogger().info("[discord] " + getConfig().getString("lang.console.discord.attemptingConnection"));
             jda = builder.build();
