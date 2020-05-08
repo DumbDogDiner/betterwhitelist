@@ -7,9 +7,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class RootSubCommand implements BaseClass {
 	public void execute(CommandSender sender) {
-		sender.sendMessage(
-				new TextComponent("BetterwhitelistBungee v" + getPluginDescription().getVersion()),
-				new TextComponent("Created by: " + getPluginDescription().getAuthor())
-		);
+		sender.sendMessage(new TextComponent("BetterwhitelistBungee v" + getPluginDescription().getVersion() + "\nCreated by: " + getPluginDescription().getAuthor()));
 	}
 }
