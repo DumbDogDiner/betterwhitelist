@@ -1,6 +1,7 @@
 package com.dumbdogdiner.betterwhitelist.commands.sub;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 import com.dumbdogdiner.betterwhitelist.utils.MojangUser;
 import com.dumbdogdiner.betterwhitelist.utils.UsernameValidator;
 
