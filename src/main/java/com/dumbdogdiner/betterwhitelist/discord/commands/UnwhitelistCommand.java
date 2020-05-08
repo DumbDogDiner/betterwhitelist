@@ -2,6 +2,7 @@ package com.dumbdogdiner.betterwhitelist.discord.commands;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
+import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 import com.dumbdogdiner.betterwhitelist.discord.utils.RoleUtil;
 
 import net.dv8tion.jda.api.entities.Member;
@@ -14,6 +15,9 @@ public class UnwhitelistCommand extends Command implements BaseClass {
     public UnwhitelistCommand() {
         this.name = "unwhitelist";
         this.description = "Remove yourself from the whitelist of the Minecraft server.";
+
+        // Require ratelimit
+        RatelimitUtil.registerRateLimit(this, 5.0);
     }
 
     @Override
