@@ -49,6 +49,7 @@ public class SQL implements BaseClass {
         // Set a pool name.
         config.setPoolName("BetterwhitelistBungeePool-1");
         
+        // Increase the maximum pool size.
         config.setMaximumPoolSize(32);
 
         ds = new HikariDataSource(config);

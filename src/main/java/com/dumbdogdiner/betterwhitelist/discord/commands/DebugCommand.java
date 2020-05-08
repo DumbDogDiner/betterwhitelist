@@ -20,17 +20,11 @@ public class DebugCommand extends Command implements BaseClass {
     @Override
     public void run(MessageReceivedEvent e, String... args) {
     	// Make sure the channel matches the config.
-    	getLogger().info("GETID: " + e.getChannel().getIdLong());
-    	getLogger().info("STR: " + getBot().debugTextChannelId);
-    	
     	// JDA is weird, don't ask.
     	if (e.getChannel().getIdLong() != getBot().debugTextChannelId) {
     		// Channel does not match, returning without a message...
-    		getLogger().info("FAILED, RET");
     		return;
     	}
-    	
-    	getLogger().info("PASSED");
     	
     	EmbedBuilder embed = new EmbedBuilder();
     	
