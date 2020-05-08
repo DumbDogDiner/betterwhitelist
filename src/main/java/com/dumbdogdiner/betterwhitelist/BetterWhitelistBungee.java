@@ -1,8 +1,6 @@
 package com.dumbdogdiner.betterwhitelist;
 
-import com.dumbdogdiner.betterwhitelist.commands.UnwhitelistCommand;
-import com.dumbdogdiner.betterwhitelist.commands.WhitelistCommand;
-import com.dumbdogdiner.betterwhitelist.commands.WhoisCommand;
+import com.dumbdogdiner.betterwhitelist.commands.BaseCommand;
 import com.dumbdogdiner.betterwhitelist.discord.WhitelistBot;
 import com.dumbdogdiner.betterwhitelist.listeners.PlayerEventListener;
 import com.dumbdogdiner.betterwhitelist.utils.PluginConfig;
@@ -52,9 +50,7 @@ public class BetterWhitelistBungee extends Plugin {
 
         manager.registerListener(this, new PlayerEventListener());
         
-        manager.registerCommand(this, new WhoisCommand());
-        manager.registerCommand(this, new WhitelistCommand());
-        manager.registerCommand(this, new UnwhitelistCommand());
+        manager.registerCommand(this, new BaseCommand());
     }
 
     @Override

@@ -15,7 +15,7 @@ public class GetStatusCommand extends Command implements BaseClass {
     @Override
     public void run(MessageReceivedEvent e, String... args) {
         e.getChannel().sendMessage(String.format(
-            getConfig().getString("lang.discord.status"),
+            getConfig().getString("lang.discord.status").replaceAll("#n", "\n"),
             Math.round(getBot().getJDA().getGatewayPing()
         ))).queue();
     }

@@ -35,7 +35,7 @@ public class WhitelistBot implements BaseClass {
 	
 	private JDA jda;
 	
-	public Long debugTextChannelId;
+	public Long debugTextChannelId = 0L;
 
     public WhitelistBot() {
     	// constructor
