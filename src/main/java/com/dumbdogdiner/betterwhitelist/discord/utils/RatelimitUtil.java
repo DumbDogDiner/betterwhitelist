@@ -6,6 +6,8 @@ import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
 import net.dv8tion.jda.api.entities.User;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +31,7 @@ public class RatelimitUtil implements BaseClass {
      * @param command The name of the command
      * @param length The duration in seconds inbetween which users must wait before being able to run the command agian.
      */
-    public static void registerRateLimit(Command command, Double length) {
+    public static <T extends Command> void registerRateLimit(T command, Double length) {
         ratelimitLengths.put(command.getName(), length * 1000);
         userRatelimitData.put(command.getName(), new HashMap<>());
     }
@@ -41,16 +43,7 @@ public class RatelimitUtil implements BaseClass {
      * @return Ratelimited?
      */
     public static boolean isRatelimited(Command command, User user) {
-        var commandRateLimits = userRatelimitData.get(command.getName());
-
-        if (commandRateLimits == null) {
-            return false;
-        }
-
-        var duration = ratelimitLengths.get(command.getName());
-        var lastUsed = userRatelimitData.get(command.getName()).get(user.getId());
-
-        return System.currentTimeMillis() > lastUsed + duration;
+        return fetchTimeRemaining(command, user) != 0.0;
     }
 
     /**
@@ -61,12 +54,11 @@ public class RatelimitUtil implements BaseClass {
      */
     public static Double fetchTimeRemaining(Command command, User user) {
         var duration = ratelimitLengths.get(command.getName());
+        var lastUsed = userRatelimitData.get(command.getName()).get(user.getId());
 
-        if (duration == null) {
+        if (duration == null || lastUsed == null) {
             return 0.0;
         }
-
-        var lastUsed = userRatelimitData.get(command.getName()).get(user.getId());
 
         var raw = duration - (System.currentTimeMillis() - lastUsed);
         return Math.max(raw, 0.0);
@@ -80,9 +72,11 @@ public class RatelimitUtil implements BaseClass {
      */
     public static String getRatelimitMessage(Command command, User user) {
         // TODO: Need localisation for this :3
+        NumberFormat format = new DecimalFormat("#0.0");
+
         return String.format(
-                ":alarm_clock: Please wait another `%a` seconds before running this command again.",
-                Math.floor(fetchTimeRemaining(command, user) / 100) / 10
+                ":alarm_clock: Please wait another `%s` seconds before running this command again.",
+                format.format(fetchTimeRemaining(command, user) / 1000)
         );
     }
 
