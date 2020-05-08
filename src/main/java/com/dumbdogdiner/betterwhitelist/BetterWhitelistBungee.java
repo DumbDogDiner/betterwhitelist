@@ -45,8 +45,8 @@ public class BetterWhitelistBungee extends Plugin {
     public void onEnable() {
         instance = this;
         config = new PluginConfig();
-        bot = new WhitelistBot();
         sql = new SQL();
+        bot = new WhitelistBot();
         
         PluginManager manager = getProxy().getPluginManager();
 
