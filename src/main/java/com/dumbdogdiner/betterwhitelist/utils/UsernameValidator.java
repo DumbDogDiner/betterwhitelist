@@ -57,8 +57,8 @@ public class UsernameValidator {
      * @return
      */
     private static String formUrl(String username) {
-        String baseUrl = "https://api.mojang.com/users/profiles/minecraft/";
-        return String.format("%s%s?at=%s", baseUrl, username, System.currentTimeMillis() / 1000L);
+        String baseUrl = "https://api.minetools.eu/uuid/";
+        return String.format("%s%s", baseUrl, username);
     }
 
     /**
