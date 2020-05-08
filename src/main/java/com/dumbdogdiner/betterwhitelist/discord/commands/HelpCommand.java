@@ -3,6 +3,7 @@ package com.dumbdogdiner.betterwhitelist.discord.commands;
 import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.dumbdogdiner.betterwhitelist.BetterWhitelistBungee;
 import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
+import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -13,6 +14,9 @@ public class HelpCommand extends Command implements BaseClass {
     public HelpCommand() {
         this.name = "help";
         this.description = "Shows the list of available bot commands.";
+
+        // No ratelimit required.
+        RatelimitUtil.registerRateLimit(this, 0.0);
     }
 
     @Override

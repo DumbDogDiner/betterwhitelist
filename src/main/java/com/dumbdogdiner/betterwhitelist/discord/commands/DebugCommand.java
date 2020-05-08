@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
+import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 import com.dumbdogdiner.betterwhitelist.utils.ConfigMXBean;
 import com.dumbdogdiner.betterwhitelist.utils.PoolMXBean;
 
@@ -15,6 +16,9 @@ public class DebugCommand extends Command implements BaseClass {
     public DebugCommand() {
         this.name = "debug";
         this.description = "Get debug information.";
+
+        // No ratelimit required.
+        RatelimitUtil.registerRateLimit(this, 0.0);
     }
 
     @Override
