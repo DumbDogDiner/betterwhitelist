@@ -1,6 +1,5 @@
-# Whether to connect to the SQL server. Enable this if you want the bot to
-# be able to store whitelisted users.
-enableSql: false
+# No changing! >:(
+version: 2
 
 ## Whether to disable checking for player UUIDs on join.
 disableUuidChecking: false
@@ -14,19 +13,18 @@ mysql:
   username: "root"
   password: "password"
 
-# Add player overrides
-overrides:
-  - skyefoxie
-
 discord:
   # Bot token the plugin should use.
-  token: 'discord token here'
+  token: "discord token here"
 
   # The ID of the guild you want the bot to listen in.
-  guildId: 'guild id here'
+  guildId: "guild id here"
 
   # The prefix the bot should use.
-  prefix: '-'
+  prefix: "-"
+  
+  # The ID of the guild text channel that debug commands are allowed to be run from.
+  debugChannelId: "12345678"
 
   # Whether users are able to run the `-minecraft <username>` command
   # and verify themselves.
@@ -44,11 +42,81 @@ discord:
     # The role users are required to have to be able to be whitelisted.
     requiredRole:
       enabled: false
-      roleId: 'required role id here'
+      roleId: "required role id here"
 
     # The role users are granted once whitelisted.
     grantedRole:
       enabled: false
       silent: false
-      roleId: ''
+      roleId: ""
 
+lang:
+  onDisable: "Aarrff!! (see you again soon :3)"
+  
+  discordStatus: "the cutest fuzzballs \uD83E\uDDE1"
+  
+  # lang.player - Minecraft player/console messages.
+  player:
+    disconnectMessage: "You are not whitelisted on this network!"
+    guildMemberLeave: "You have left %s and have been removed from the whitelist!"
+    guildBan: "You were banned from %s and have been removed from the whitelist!"
+  
+  # lang.console - Minecraft Console-only messages.
+  console:
+    postLogin:
+      uuidCheckingDisabled: "Skipping handling new player connection - checking disabled."
+      checkingUuid: "Checking that UUID '%s' is whitelisted..."
+      
+    sql:
+      handleSqlError: "Failed to execute SQL statement."
+      checkTable: "Checking the UUID table is valid..."
+      upgradingTable: "Upgrading table..."
+      addEntry: "Added whitelist entry: '%s' => '%s'"
+      removeEntryPreWarning: "Request to remove non-existent whitelist entry for ID '%s'."
+      removeEntryPostInfo: "Removed whitelist entry: '%s'"
+    
+    config:
+      save: "Saving configuration to disk..."
+      loadError: "Error loading config.yml"
+    
+    discord:
+      commands: "Have %d commands: %s"
+      attemptingConnection: "Attempting connection to Discord..."
+      loginError: "WhitelistBot threw an error while trying to authenticate with Discord."
+      grantedRoleError: "Unable to retrieve grantedRole '%s'."
+      banSyncDisabledWarning: "Not removing user '%s' from whitelist - enableBanSync=false"
+      disconnectingIfStillOnline: "Disconnecting player if they are still online..."
+      userRemoved: "Removed user with Discord ID '%s' from the whitelist."
+      
+  
+  # lang.discord - Discord messages
+  discord:
+    mentioned: "**Hai!! ^w^** My prefix is `%s`."
+    unknownCommand: ":x: **Oops!** Unknown command `%s` - do `%shelp` for a list of commands."
+    internalError: ":x: **Whoops!** Internal error - please ask a dev to take a look. (`%s`)"
+    
+    grantedRole: ":inbox_tray: You were also granted the **%s** role!"
+    roleAddError: ":warning: You are also supposed to be granted a role, but something went wrong while I was trying to add it to you. Please contact an admin so they can add it for you!"
+    
+    # Whitelist Command
+    selfWhitelistingDisabled: ":x: **Self-whitelisting has been disabled.**"
+    missingRequiredRole: ":x: **Whoops!** You don't have the role needed to be able to self-whitelist."
+    usernameNotSpecified: ":x: **Whoops!** You didn't specify your MC username. Make sure you run the command in the format `%swhitelist <username>`."
+    alreadyWhitelistedOneUserOnly: ":x: **Failed to verify!** You already have a Minecraft account whitelisted - you can unwhitelist it by running `%sunwhitelist`."
+    minecraftAccountAlreadyWhitelisted: ":warning: **%s** is already whitelisted!"
+    invalidUsername: ":x: **Failed to verify!** Invalid Username - did you make a typo somewhere?"
+    userAddError: ":x: **Failed to add you to whitelist!** Please contact a dev so they can manually add you. (`SQL_ERROR`)"
+    userWhitelisted: ":white_check_mark: Whitelisted user **%s**! (`%s`)"
+    
+    # Unwhitelist Command
+    userRemoved: ":white_check_mark: User `%s` was removed from the whitelist."
+    userRemovedError: ":x: **Could not remove user from the whitelist!** Perhaps they aren't on it to begin with?"
+    userRemovedNotFoundError: ":x: Unable to find user."
+    userRemovedPermissionError: ":x: You do not have the required permissions to remove this user from the whitelist."
+    
+    # Help Command
+    help: "**Aarrff!!** BetterWhitelist `v%s`#n#nAvailable Commands:#n - %s"
+    
+    # Status Command
+    status: "**Meep!! ^w^**#n> Ping: `%dms`"
+    
