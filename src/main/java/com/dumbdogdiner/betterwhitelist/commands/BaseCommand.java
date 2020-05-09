@@ -2,6 +2,7 @@ package com.dumbdogdiner.betterwhitelist.commands;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.dumbdogdiner.betterwhitelist.commands.sub.RootSubCommand;
+import com.dumbdogdiner.betterwhitelist.commands.sub.UUIDLookupSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.UnwhitelistSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.WhitelistSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.HelpSubCommand;
@@ -15,6 +16,7 @@ public class BaseCommand extends Command implements BaseClass {
 	private final WhitelistSubCommand whitelist;
 	private final UnwhitelistSubCommand unwhitelist;
 	private final HelpSubCommand help;
+	private final UUIDLookupSubCommand uuid;
 
     public BaseCommand() {
         super("betterwhitelist", "betterwhitelist.read.base");
@@ -23,6 +25,8 @@ public class BaseCommand extends Command implements BaseClass {
         whitelist = new WhitelistSubCommand();
         unwhitelist = new UnwhitelistSubCommand();
         help = new HelpSubCommand();
+        uuid = new UUIDLookupSubCommand();
+        
         
     }
 
@@ -43,6 +47,10 @@ public class BaseCommand extends Command implements BaseClass {
 		// Help command = [/betterwhitelist help]
 		} else if (args[0].equalsIgnoreCase("help")) {
 			help.execute(sender);
+		
+		// UUID Lookup command = [/betterwhitelist uuidlookup <username>]
+		} else if (args[0].equalsIgnoreCase("uuidlookup")) {
+			uuid.execute(sender, args);
 			
 		// Catch-all, show help
 		} else {

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -84,6 +85,9 @@ public class UsernameValidator {
             reader.close();
 
             return builder.toString();
+        } catch (FileNotFoundException err) {
+        	// User does not exist, supress the trace and return null.
+        	return null;
         } catch (Exception err) {
             err.printStackTrace();
             return null;

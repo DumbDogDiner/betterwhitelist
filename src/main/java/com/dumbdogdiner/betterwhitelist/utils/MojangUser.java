@@ -6,4 +6,5 @@ package com.dumbdogdiner.betterwhitelist.utils;
 public class MojangUser {
     public String id;
     public String name;
+    public int server;
 }
