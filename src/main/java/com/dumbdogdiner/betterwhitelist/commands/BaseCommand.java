@@ -33,15 +33,15 @@ public class BaseCommand extends Command implements BaseClass {
 			root.execute(sender);
 			
 		// Whitelist command [/betterwhitelist whitelist [..] [..]
-		} else if (args[0] == "whitelist" && sender.hasPermission("betterwhitelist.admin.whitelist")) {
+		} else if (args[0].equalsIgnoreCase("whitelist") && sender.hasPermission("betterwhitelist.admin.whitelist")) {
 			whitelist.execute(sender, args);
 			
 		// Unwhitelist command [/betterwhitelist unwhitelist [..]
-		} else if (args[0] == "unwhitelist" && sender.hasPermission("betterwhitelist.admin.unwhitelist")) {
+		} else if (args[0].equalsIgnoreCase("unwhitelist") && sender.hasPermission("betterwhitelist.admin.unwhitelist")) {
 			unwhitelist.execute(sender, args);
 			
 		// Help command = [/betterwhitelist help]
-		} else if (args[0] == "help") {
+		} else if (args[0].equalsIgnoreCase("help")) {
 			help.execute(sender);
 			
 		// Catch-all, show help
