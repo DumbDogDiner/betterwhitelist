@@ -1,15 +1,12 @@
 package com.dumbdogdiner.betterwhitelist.discord.utils;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
-import com.dumbdogdiner.betterwhitelist.BetterWhitelistBungee;
 import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
 import net.dv8tion.jda.api.entities.User;
-import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class for managing and ratelimiting users to prevent spamming of commands.
@@ -23,8 +20,8 @@ public class RatelimitUtil implements BaseClass {
         return new RatelimitUtil();
     }
 
-    private static HashMap<String, Double> ratelimitLengths = new HashMap<>();
-    private static HashMap<String, HashMap<String, Double>> userRatelimitData = new HashMap<>();
+    private static final HashMap<String, Double> ratelimitLengths = new HashMap<>();
+    private static final HashMap<String, HashMap<String, Double>> userRatelimitData = new HashMap<>();
 
     /**
      * Register a command that requires rate-limiting.
@@ -54,9 +51,17 @@ public class RatelimitUtil implements BaseClass {
      */
     public static Double fetchTimeRemaining(Command command, User user) {
         var duration = ratelimitLengths.get(command.getName());
-        var lastUsed = userRatelimitData.get(command.getName()).get(user.getId());
+        var commandData = userRatelimitData.get(command.getName());
 
-        if (duration == null || lastUsed == null) {
+        // Not necessarily defined - check for null.
+        if (commandData == null || duration == null) {
+            return 0.0;
+        }
+
+        // Also not necessarily defined.
+        var lastUsed = commandData.get(user.getId());
+
+        if (lastUsed == null) {
             return 0.0;
         }
 
