@@ -72,7 +72,7 @@ public class WhitelistCommand extends Command implements BaseClass {
         }
 
         // Send a success message.
-        e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.userWhitelisted"), user.name, user.id))
+        e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.userWhitelisted"), user.name, String.format("%s#%s", user.id, user.server)))
                 .queue(message -> RoleUtil.addGrantedRole(e));
     }
 

@@ -32,7 +32,7 @@ public class WhitelistSubCommand implements BaseClass {
 
         if (getSQL().addEntry(discordId, user.id)) {
             sender.sendMessage(new TextComponent(
-                    ChatColor.AQUA + "Mapped user " + user.name + " to Discord ID '" + discordId + "'."));
+                    ChatColor.AQUA + "Mapped user " + user.name + " to Discord ID '" + discordId + "'. (via uuid server #" + user.server + ")"));
         } else {
             sender.sendMessage(new TextComponent(ChatColor.RED + "Failed to map user - SQL update failed."));
         }
