@@ -57,7 +57,8 @@ public class UsernameValidator {
      * @return
      */
     private static String formUrl(String username) {
-        String baseUrl = "https://api.minetools.eu/uuid/";
+        // caching, load-balancing UUID server.
+        String baseUrl = "https://mcuuid.jcx.ovh/v1/uuid/";
         return String.format("%s%s", baseUrl, username);
     }
 
