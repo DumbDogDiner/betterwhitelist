@@ -163,7 +163,7 @@ public class SQL implements BaseClass {
      * Fetch a user's Discord ID from their Minecraft UUID.
      * 
      * @param uuid
-     * @return
+     * @return { String | Null } String if found, else null.
      */
     public String getDiscordIDFromMinecraft(String uuid) {
         try {
@@ -194,7 +194,7 @@ public class SQL implements BaseClass {
      * Fetch a user's Minecraft UUID from their Discord ID.
      * 
      * @param discordID
-     * @return
+     * @return { String | Null } String if found, else null.
      */
     public String getUuidFromDiscordId(String discordID) {
         try {
