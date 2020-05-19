@@ -27,7 +27,7 @@ public class UUIDLookupCommand extends Command implements BaseClass {
              return;
          }
     	 
-    	 MojangUser user = UsernameValidator.getUser(args[0]);
+    	 MojangUser user = UsernameValidator.getUser(args[0], "commands.discord.uuidlookup");
  		
  		if (user != null) {
  			e.getChannel().sendMessage(String.format(":information_source:  User **%s** has UUID `%s`  (server #%s)", user.name, user.id, user.server)).queue();

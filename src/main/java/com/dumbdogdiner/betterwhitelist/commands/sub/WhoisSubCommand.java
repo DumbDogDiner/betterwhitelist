@@ -22,7 +22,7 @@ public class WhoisSubCommand implements BaseClass {
         if (args[1].equalsIgnoreCase("minecraft") && args[2].length() <= 16) {
         	// Minecraft Username.
         	
-        	MojangUser user = UsernameValidator.getUser(args[2]);
+        	MojangUser user = UsernameValidator.getUser(args[2], "commands.ig.whois.minecraft.username");
         	
         	String discordId = getSQL().getDiscordIDFromMinecraft(user.id);
         	

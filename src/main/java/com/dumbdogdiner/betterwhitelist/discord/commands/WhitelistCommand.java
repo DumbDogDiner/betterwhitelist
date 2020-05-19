@@ -49,7 +49,7 @@ public class WhitelistCommand extends Command implements BaseClass {
             return;
         }
 
-        MojangUser user = UsernameValidator.getUser(args[0]);
+        MojangUser user = UsernameValidator.getUser(args[0], "commands.discord.whitelist");
         
         
         // If the specified Minecraft username is already whitelisted, show an error.

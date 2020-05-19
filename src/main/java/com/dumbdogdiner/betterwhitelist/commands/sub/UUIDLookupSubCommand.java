@@ -15,7 +15,7 @@ public class UUIDLookupSubCommand implements BaseClass {
             return;
         }
 		
-		MojangUser user = UsernameValidator.getUser(args[1]);
+		MojangUser user = UsernameValidator.getUser(args[1], "commands.ig.uuidlookup");
 		
 		if (user != null) {
 			sender.sendMessage(new TextComponent(ChatColor.AQUA + "User '" + user.name + "' has UUID: " + user.id + " (server #" + user.server + ")"));
