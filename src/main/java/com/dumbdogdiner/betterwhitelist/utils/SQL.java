@@ -60,8 +60,12 @@ public class SQL implements BaseClass {
         checkTable();
     }
     
-    private void createAndExecUpdate(String request) throws SQLException {
+    private void createAndExecUpdate(String request, String ...params) throws SQLException {
     	PreparedStatement pt = ds.getConnection().prepareStatement(request);
+    	
+    	for (int i = 0; i < params.length; i++) {
+    		pt.setString(i + 1, params[i]);
+    	}
     	
     	pt.executeUpdate();
     	
@@ -69,8 +73,12 @@ public class SQL implements BaseClass {
     	pt.close(); // close the statement (removes ResultSet if there)
     }
     
-    private QueryResponse createAndExecQuery(String request) throws SQLException {
+    private QueryResponse createAndExecQuery(String request, String ...params) throws SQLException {
     	PreparedStatement pt = ds.getConnection().prepareStatement(request);
+    	
+    	for (int i = 0; i < params.length; i++) {
+    		pt.setString(i + 1, params[i]);
+    	}
     	
     	ResultSet result = pt.executeQuery();
     	
@@ -167,7 +175,7 @@ public class SQL implements BaseClass {
      */
     public String getDiscordIDFromMinecraft(String uuid) {
         try {
-        	QueryResponse res = createAndExecQuery("SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
+        	QueryResponse res = createAndExecQuery("SELECT `discordID` FROM `minecraft_whitelist` WHERE `minecraft_uuid`=?", uuid);
 
             // Return the first result.
             while (res.result.next()) {
@@ -198,7 +206,7 @@ public class SQL implements BaseClass {
      */
     public String getUuidFromDiscordId(String discordID) {
         try {
-        	QueryResponse res = createAndExecQuery("SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
+        	QueryResponse res = createAndExecQuery("SELECT `minecraft_uuid` FROM `minecraft_whitelist` WHERE `discordID`=?", discordID);
         	
             if (res.result.next()) {
                 String uuid = res.result.getString(1);
@@ -228,7 +236,7 @@ public class SQL implements BaseClass {
      */
     public boolean addEntry(String discordID, String uuid) {
         try {
-        	createAndExecUpdate("INSERT IGNORE INTO `minecraft_whitelist` (`discordID`, `minecraft_uuid`) VALUES ('" + discordID + "','" + uuid + "');");
+        	createAndExecUpdate("INSERT IGNORE INTO `minecraft_whitelist` (`discordID`, `minecraft_uuid`) VALUES (?, ?)", discordID, uuid);
 
             getLogger().info("[SQL] " + String.format(getConfig().getString("lang.console.sql.addEntry"), discordID, uuid));
 
@@ -254,7 +262,7 @@ public class SQL implements BaseClass {
         }
 
         try {
-        	createAndExecUpdate("DELETE FROM `minecraft_whitelist` WHERE `discordID`='" + discordID + "'");
+        	createAndExecUpdate("DELETE FROM `minecraft_whitelist` WHERE `discordID`=?", discordID);
 
             getLogger().info("[SQL] " + String.format(getConfig().getString("lang.console.sql.removeEntryPostInfo"), discordID));
 
@@ -274,7 +282,7 @@ public class SQL implements BaseClass {
      */
     public boolean removeEntryUsingUuid(String uuid) {
         try {
-        	createAndExecUpdate("DELETE FROM `minecraft_whitelist` WHERE `minecraft_uuid`='" + uuid + "'");
+        	createAndExecUpdate("DELETE FROM `minecraft_whitelist` WHERE `minecraft_uuid`=?", uuid);
             return true;
         }
 
