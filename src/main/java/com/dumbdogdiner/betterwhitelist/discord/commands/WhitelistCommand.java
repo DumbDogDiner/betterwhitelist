@@ -51,17 +51,18 @@ public class WhitelistCommand extends Command implements BaseClass {
 
         MojangUser user = UsernameValidator.getUser(args[0], "commands.discord.whitelist");
         
-        
-        // If the specified Minecraft username is already whitelisted, show an error.
-        if (getSQL().getDiscordIDFromMinecraft(user.id) != null) {
-        	e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.minecraftAccountAlreadyWhitelisted"), user.getEscapedName())).queue();
-        	return;
-        }
 
         // If the specified Minecraft user could not be resolved to an UUID (b/c the account does not exist), show an error.
         if (user == null || user.id == null) {
             e.getChannel().sendMessage(getConfig().getString("lang.discord.invalidUsername")).queue();
             return;
+        }
+        
+        
+        // If the specified Minecraft username is already whitelisted, show an error.
+        if (getSQL().getDiscordIDFromMinecraft(user.id) != null) {
+        	e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.minecraftAccountAlreadyWhitelisted"), user.getEscapedName())).queue();
+        	return;
         }
 
         // Add user to SQL.
