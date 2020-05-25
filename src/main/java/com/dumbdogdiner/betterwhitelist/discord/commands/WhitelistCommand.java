@@ -54,7 +54,7 @@ public class WhitelistCommand extends Command implements BaseClass {
         
         // If the specified Minecraft username is already whitelisted, show an error.
         if (getSQL().getDiscordIDFromMinecraft(user.id) != null) {
-        	e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.minecraftAccountAlreadyWhitelisted"), user.name)).queue();
+        	e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.minecraftAccountAlreadyWhitelisted"), user.getEscapedName())).queue();
         	return;
         }
 
@@ -72,7 +72,7 @@ public class WhitelistCommand extends Command implements BaseClass {
         }
 
         // Send a success message.
-        e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.userWhitelisted"), user.name, String.format("%s#%s", user.id, user.server)))
+        e.getChannel().sendMessage(String.format(getConfig().getString("lang.discord.userWhitelisted"), user.getEscapedName(), String.format("%s#%s", user.id, user.server)))
                 .queue(message -> RoleUtil.addGrantedRole(e));
     }
 

@@ -30,9 +30,9 @@ public class UUIDLookupCommand extends Command implements BaseClass {
     	 MojangUser user = UsernameValidator.getUser(args[0], "commands.discord.uuidlookup");
  		
  		if (user != null) {
- 			e.getChannel().sendMessage(String.format(":information_source:  User **%s** has UUID `%s`  (server #%s)", user.name, user.id, user.server)).queue();
+ 			e.getChannel().sendMessage(String.format(":information_source:  User **%s** has UUID `%s`  (server #%s)", user.getEscapedName(), user.id, user.server)).queue();
  		} else {
- 			e.getChannel().sendMessage(String.format(":x: **Whoops!** User `%s` does not exist!", args[0])).queue();
+ 			e.getChannel().sendMessage(String.format(":x: **Whoops!** User `%s` does not exist!", escapeString(args[0]))).queue();
  		}
     }
 }

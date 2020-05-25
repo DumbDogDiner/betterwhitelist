@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.logging.Logger;
 
 import com.dumbdogdiner.betterwhitelist.discord.WhitelistBot;
+import com.dumbdogdiner.betterwhitelist.utils.EscapedString;
 import com.dumbdogdiner.betterwhitelist.utils.PluginConfig;
 import com.dumbdogdiner.betterwhitelist.utils.SQL;
 
@@ -57,5 +58,9 @@ public interface BaseClass {
 	
 	default WhitelistBot getBot() {
 		return getInstance().getBot();
+	}
+	
+	default String escapeString(String str) {
+		return EscapedString.escapeString(str);
 	}
 }
