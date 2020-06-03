@@ -22,12 +22,12 @@ public class XblUnwhitelistSubCommand implements BaseClass {
             return;
         }
 
-        if (getSQL().getDiscordIDFromMinecraft("xbl-" + user.getID()) == null) {
+        if (getSQL().getDiscordIDFromMinecraft(user.getID()) == null) {
             sender.sendMessage(new TextComponent(ChatColor.RED + "Player '" + args[1] + "' is not whitelisted."));
             return;
         }
 
-        if (getSQL().removeEntryUsingUuid("xbl-" + user.getID())) {
+        if (getSQL().removeEntryUsingUuid(user.getID())) {
             sender.sendMessage(new TextComponent(
                     ChatColor.AQUA + "Removed Xbox Live user " + user.getName() + " ('" + user.getDecimalXUID() + "') from the whitelist."));
         } else {
