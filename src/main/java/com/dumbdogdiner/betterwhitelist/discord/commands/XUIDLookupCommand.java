@@ -3,12 +3,13 @@ package com.dumbdogdiner.betterwhitelist.discord.commands;
 import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
 import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
+import com.dumbdogdiner.betterwhitelist.utils.IXboxGamertagUtil;
 import com.dumbdogdiner.betterwhitelist.utils.XboxLiveUser;
 import com.dumbdogdiner.betterwhitelist.utils.XboxLiveUsernameValidator;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class XUIDLookupCommand extends Command implements BaseClass {
+public class XUIDLookupCommand extends Command implements BaseClass, IXboxGamertagUtil {
 
     public XUIDLookupCommand() {
         this.name = "xuidlookup";
@@ -26,13 +27,15 @@ public class XUIDLookupCommand extends Command implements BaseClass {
                      .queue();
              return;
          }
+         
+        String username = getGamertagFromArray(0, args);
     	 
-    	XboxLiveUser user = XboxLiveUsernameValidator.getUser(args[0], "commands.discord.xuidlookup");
+    	XboxLiveUser user = XboxLiveUsernameValidator.getUser(username, "commands.discord.xuidlookup");
  		
  		if (user != null) {
  			e.getChannel().sendMessage(String.format(":information_source:  User **%s** has XUID `%s`", user.getEscapedName(), user.getDecimalXUID())).queue();
  		} else {
- 			e.getChannel().sendMessage(String.format(":x: **Whoops!** User `%s` does not exist!", escapeString(args[0]))).queue();
+ 			e.getChannel().sendMessage(String.format(":x: **Whoops!** User `%s` does not exist!", escapeString(username))).queue();
  		}
     }
 }

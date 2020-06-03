@@ -14,7 +14,7 @@ plugins {
 }
 
 group 'com.dumbdogdiner'
-version '2.4.0_10.9.4-DEV'
+version '2.4.0_10.9.5-DEV'
 
 // Always run shadowJar whenever 'build' is called
 tasks.build.dependsOn tasks.shadowJar
