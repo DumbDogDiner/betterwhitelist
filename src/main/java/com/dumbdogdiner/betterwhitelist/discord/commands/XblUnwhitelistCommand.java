@@ -40,7 +40,7 @@ public class XblUnwhitelistCommand extends Command implements BaseClass {
             return;
         }
 
-        if (getSQL().removeEntry(target.getId())) {
+        if (getSQL().removeEntry(String.format("X%S", target.getId()))) {
             e.getChannel().sendMessage(
             		String.format(getConfig().getString("lang.discord.userRemoved"), target.getUser().getAsTag()))
                     .queue(message -> RoleUtil.removeGrantedRole(e));
