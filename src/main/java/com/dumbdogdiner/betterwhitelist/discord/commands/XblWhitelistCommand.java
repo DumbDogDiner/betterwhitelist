@@ -51,7 +51,6 @@ public class XblWhitelistCommand extends Command implements BaseClass, IXboxGame
         }
         
         String username = getGamertagFromArray(0, args);
-        getLogger().info("debug username: '" + username + "'");
         
         XboxLiveUser user = XboxLiveUsernameValidator.getUser(username, "commands.discord.xblwhitelist");
         

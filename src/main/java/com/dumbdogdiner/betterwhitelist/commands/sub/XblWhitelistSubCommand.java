@@ -18,7 +18,6 @@ public class XblWhitelistSubCommand implements BaseClass, IXboxGamertagUtil {
         }
         
         String username = getGamertagFromArray(1, args.length - 1, args);
-        getLogger().info("debug username: '" + username + "'");
 
         XboxLiveUser user = XboxLiveUsernameValidator.getUser(username, "commands.ig.xblwhitelist");
         
