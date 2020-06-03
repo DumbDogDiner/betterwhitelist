@@ -27,19 +27,21 @@ public class PlayerEventListener implements Listener, BaseClass {
             return;
         }
         
-        MojangUser user = UsernameValidator.getUser(player);
+        MojangUser user =  UsernameValidator.getUser(player);
         
         // User has bypass permission.
         if (player.hasPermission("betterwhitelist.bypass")) {
-        	getLogger().info(String.format("'%s' (UUID %s) has a bypass!", user.name, user.id));
+        	getLogger().info(String.format("'%s' (UUID %s) has a bypass!", user.getName(), user.getID()));
         	return;
         };
+        
+        getLogger().info(String.format(getConfig().getString("lang.console.postLogin.checkingUuid"), user.getID()));
 
-        getLogger().info(String.format(getConfig().getString("lang.console.postLogin.checkingUuid"), user.id));
-
-        if (getSQL().getDiscordIDFromMinecraft(user.id) == null) {
+        if (getSQL().getDiscordIDFromMinecraft(user.getID()) == null) {
         	// User is not whitelisted.
         	player.disconnect(new TextComponent(ChatColor.RED + getConfig().getString("lang.player.disconnectMessage")));
         }
+        
+        // no use - users are always treated as mojang users here. - getLogger().info(String.format("[join] [PlayerEventListener] Sucessfully processed player %s (%s) with uuid %s (IUser id '%s')", user.getName(), user.getType(), player.getUniqueId(), user.getID()));
     }
 }
