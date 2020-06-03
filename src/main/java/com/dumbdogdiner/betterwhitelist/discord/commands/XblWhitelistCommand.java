@@ -66,7 +66,7 @@ public class XblWhitelistCommand extends Command implements BaseClass {
         }
 
         // Add user to SQL.
-        if (!getSQL().addEntry("xbl-" + e.getAuthor().getId(), user.getID())) {
+        if (!getSQL().addEntry(String.format("X%s", e.getAuthor().getId()), user.getID())) {
         	// If there is an error, display it.
             e.getChannel().sendMessage(getConfig().getString("lang.discord.userAddError")).queue();
             return;

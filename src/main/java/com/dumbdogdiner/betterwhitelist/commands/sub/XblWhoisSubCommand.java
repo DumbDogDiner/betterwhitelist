@@ -28,7 +28,7 @@ public class XblWhoisSubCommand implements BaseClass {
         	
         	if (discordId != null) {
         		// Result found!
-        		sender.sendMessage(new TextComponent(ChatColor.AQUA + String.format("User '%s' (%s) has Discord ID: '%s'", user.getName(), user.getID(), discordId.replace("xbl-", ""))));
+        		sender.sendMessage(new TextComponent(ChatColor.AQUA + String.format("User '%s' (%s) has Discord ID: '%s'", user.getName(), user.getID(), discordId.replace("X", ""))));
         		return;
         	} else {
         		sender.sendMessage(new TextComponent(ChatColor.RED + "User is not whitelisted!"));
@@ -44,7 +44,7 @@ public class XblWhoisSubCommand implements BaseClass {
         	
         	if (discordId != null) {
         		// Result found!
-        		sender.sendMessage(new TextComponent(ChatColor.AQUA + String.format("User '%s' has Discord ID: '%s'", args[2], discordId.replace("xbl-", ""))));
+        		sender.sendMessage(new TextComponent(ChatColor.AQUA + String.format("User '%s' has Discord ID: '%s'", args[2], discordId.replace("X", ""))));
         		return;
         	} else {
         		sender.sendMessage(new TextComponent(ChatColor.RED + "User is not whitelisted! Did you include hyphens?"));

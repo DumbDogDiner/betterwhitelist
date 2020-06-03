@@ -31,7 +31,7 @@ public class XblWhitelistSubCommand implements BaseClass {
             return;
         }
 
-        if (getSQL().addEntry("xbl- " + discordId, user.getID())) {
+        if (getSQL().addEntry(String.format("X%s", discordId), user.getID())) {
             sender.sendMessage(new TextComponent(
                     ChatColor.AQUA + "Mapped Xbox Live user '" + user.getName() + "' to Discord ID '" + discordId + "'."));
         } else {
