@@ -1,6 +1,7 @@
 package com.dumbdogdiner.betterwhitelist.commands.sub;
 
 import com.dumbdogdiner.betterwhitelist.BaseClass;
+import com.dumbdogdiner.betterwhitelist.utils.IXboxGamertagUtil;
 import com.dumbdogdiner.betterwhitelist.utils.XboxLiveUser;
 import com.dumbdogdiner.betterwhitelist.utils.XboxLiveUsernameValidator;
 
@@ -8,7 +9,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class XblWhoisSubCommand implements BaseClass {
+public class XblWhoisSubCommand implements BaseClass, IXboxGamertagUtil {
 	
 	private void sendUsage(CommandSender sender) {
 		sender.sendMessage(new TextComponent(ChatColor.RED + "Invalid arguments - syntax: /betterwhitelist xblwhois <minecraft|discord> [..]"));
@@ -22,7 +23,9 @@ public class XblWhoisSubCommand implements BaseClass {
         if (args[1].equalsIgnoreCase("minecraft") && args[2].length() <= 16) {
         	// Minecraft (Bedrock, therefore Xbox Live) Username, same command name for ease of use compared to other commands.
         	
-        	XboxLiveUser user = XboxLiveUsernameValidator.getUser(args[2], "commands.ig.xblwhois.minecraft.username");
+            String username = getGamertagFromArray(2, args);
+        	
+        	XboxLiveUser user = XboxLiveUsernameValidator.getUser(username, "commands.ig.xblwhois.minecraft.username");
         	
         	String discordId = getSQL().getDiscordIDFromMinecraft(user.getID());
         	
@@ -54,7 +57,7 @@ public class XblWhoisSubCommand implements BaseClass {
         } else if (args[1].equalsIgnoreCase("discord")) {
         	// Discord ID - Names not supported!
         	
-        	String uuid = getSQL().getUuidFromDiscordId(String.format("xbl-%s", args[2]));
+        	String uuid = getSQL().getUuidFromDiscordId(String.format("X%s", args[2]));
         	
         	if (uuid != null) {
         		// Result found!

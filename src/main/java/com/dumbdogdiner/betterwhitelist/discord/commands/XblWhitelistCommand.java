@@ -4,12 +4,13 @@ import com.dumbdogdiner.betterwhitelist.BaseClass;
 import com.dumbdogdiner.betterwhitelist.discord.lib.Command;
 import com.dumbdogdiner.betterwhitelist.discord.utils.RatelimitUtil;
 import com.dumbdogdiner.betterwhitelist.discord.utils.RoleUtil;
+import com.dumbdogdiner.betterwhitelist.utils.IXboxGamertagUtil;
 import com.dumbdogdiner.betterwhitelist.utils.XboxLiveUser;
 import com.dumbdogdiner.betterwhitelist.utils.XboxLiveUsernameValidator;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class XblWhitelistCommand extends Command implements BaseClass {
+public class XblWhitelistCommand extends Command implements BaseClass, IXboxGamertagUtil {
 
     public XblWhitelistCommand() {
         this.name = "xblwhitelist";
@@ -48,8 +49,11 @@ public class XblWhitelistCommand extends Command implements BaseClass {
                     .queue();
             return;
         }
-
-        XboxLiveUser user = XboxLiveUsernameValidator.getUser(args[0], "commands.discord.xblwhitelist");
+        
+        String username = getGamertagFromArray(0, args);
+        getLogger().info("debug username: '" + username + "'");
+        
+        XboxLiveUser user = XboxLiveUsernameValidator.getUser(username, "commands.discord.xblwhitelist");
         
 
         // If the specified Minecraft user could not be resolved to an UUID (b/c the account does not exist), show an error.
