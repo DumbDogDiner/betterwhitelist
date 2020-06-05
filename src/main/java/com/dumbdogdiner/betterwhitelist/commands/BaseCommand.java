@@ -6,6 +6,7 @@ import com.dumbdogdiner.betterwhitelist.commands.sub.UUIDLookupSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.UnwhitelistSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.WhitelistSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.WhoisSubCommand;
+import com.dumbdogdiner.betterwhitelist.commands.sub.XUIDConvertSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.XUIDLookupSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.XblUnwhitelistSubCommand;
 import com.dumbdogdiner.betterwhitelist.commands.sub.XblWhitelistSubCommand;
@@ -25,6 +26,7 @@ public class BaseCommand extends Command implements BaseClass {
 	private final HelpSubCommand help;
 	private final UUIDLookupSubCommand uuid;
 	private final XUIDLookupSubCommand xuid;
+	private final XUIDConvertSubCommand xuidconvert;
 	private final WhoisSubCommand whois;
 	private final XblWhoisSubCommand xblwhois;
 
@@ -39,6 +41,7 @@ public class BaseCommand extends Command implements BaseClass {
         help = new HelpSubCommand();
         uuid = new UUIDLookupSubCommand();
         xuid = new XUIDLookupSubCommand();
+        xuidconvert = new XUIDConvertSubCommand();
         whois = new WhoisSubCommand();
         xblwhois = new XblWhoisSubCommand();
         
@@ -78,6 +81,10 @@ public class BaseCommand extends Command implements BaseClass {
 		// XUID (Xbox Live User ID) Lookup command = [/betterwhitelist xuidlookup <gamertag>]
 		} else if (args[0].equalsIgnoreCase("xuidlookup")) {
 			xuid.execute(sender, args);
+			
+		// XUID (Xbox Live User ID) Convert command = [/betterwhitelist xuidconvert <gamertag>]
+		} else if (args[0].equalsIgnoreCase("xuidconvert")) {
+			xuidconvert.execute(sender, args);
 			
 		// Whois command = [/betterwhitelist whois <minecraft|discord> [..]]
 		} else if (args[0].equalsIgnoreCase("whois")) {

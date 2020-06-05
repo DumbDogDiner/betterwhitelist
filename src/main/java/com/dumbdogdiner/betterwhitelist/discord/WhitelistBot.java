@@ -7,6 +7,7 @@ import com.dumbdogdiner.betterwhitelist.discord.commands.HelpCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.UUIDLookupCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.UnwhitelistCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.WhitelistCommand;
+import com.dumbdogdiner.betterwhitelist.discord.commands.XUIDConvertCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.XUIDLookupCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.XblUnwhitelistCommand;
 import com.dumbdogdiner.betterwhitelist.discord.commands.XblWhitelistCommand;
@@ -56,6 +57,7 @@ public class WhitelistBot implements BaseClass {
 
         // Register Commands
         addCommand(
+        	new XUIDConvertCommand(),
         	new XUIDLookupCommand(),
         	new UUIDLookupCommand(),
         	new DebugCommand(),
