@@ -21,7 +21,6 @@ public class XUIDLookupSubCommand implements BaseClass, IXboxGamertagUtil {
 		XboxLiveUser user = XboxLiveUsernameValidator.getUser(username, "commands.ig.xuidlookup");
 		
 		if (user != null) {
-			String.format("User '%s' has XUID: '%s'", user.getName(), user.getDecimalXUID());
 			sender.sendMessage(new TextComponent(ChatColor.AQUA + String.format("User '%s' has (decimal) XUID: '%s'", user.getName(), user.getDecimalXUID())));
 			sender.sendMessage(new TextComponent(ChatColor.AQUA + String.format("User '%s' has (hex - for uuids!) XUID: '%s'", user.getName(), user.getHexXUID())));
 		} else {
