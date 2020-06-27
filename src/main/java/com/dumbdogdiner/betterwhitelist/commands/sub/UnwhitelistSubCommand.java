@@ -15,7 +15,7 @@ public class UnwhitelistSubCommand implements BaseClass {
             return;
         }
 
-        MojangUser user = UsernameValidator.getUser(args[1]);
+        MojangUser user = UsernameValidator.getUser(args[1], "commands.ig.unwhitelist");
 
         if (user == null || user.id == null) {
             sender.sendMessage(new TextComponent(ChatColor.RED + "Unable to find a user of name '" + args[1] + "'."));

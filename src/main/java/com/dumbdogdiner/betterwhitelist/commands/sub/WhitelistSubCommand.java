@@ -16,7 +16,7 @@ public class WhitelistSubCommand implements BaseClass {
             return;
         }
 
-        MojangUser user = UsernameValidator.getUser(args[1]);
+        MojangUser user = UsernameValidator.getUser(args[1], "commands.ig.whitelist");
         String discordId = args.length > 2 ? args[2] : "none";
 
         if (user == null || user.id == null) {

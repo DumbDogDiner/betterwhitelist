@@ -126,6 +126,7 @@ public class PluginConfig implements BaseClass {
     	try {
     		Configuration newConf = getNewInternalConfiguration();
     		
+    		// Existing data to copy across.
     		String[] data = {
     				"enableSql",
     				"disableUuidChecking",

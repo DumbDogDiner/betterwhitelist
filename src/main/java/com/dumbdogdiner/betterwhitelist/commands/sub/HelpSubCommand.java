@@ -8,6 +8,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class HelpSubCommand implements BaseClass {
 	public void execute(CommandSender sender) {
-        sender.sendMessage(new TextComponent(ChatColor.RED + "Usage: /betterwhitelist <help|whitelist|unwhitelist|uuidlookup>"));
+        sender.sendMessage(new TextComponent(ChatColor.RED + "Usage: /betterwhitelist <help|whitelist|unwhitelist|xblwhitelist|xblunwhitelist|uuidlookup|xuidlookup|xuidconvert|whois|xblwhois>"));
     }
 }

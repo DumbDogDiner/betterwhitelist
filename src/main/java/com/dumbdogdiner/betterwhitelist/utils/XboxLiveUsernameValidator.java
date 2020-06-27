@@ -2,12 +2,10 @@ package com.dumbdogdiner.betterwhitelist.utils;
 
 import com.google.gson.Gson;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-
 /**
  * Class for validating Minecraft usernames.
  */
-public class UsernameValidator extends BaseUsernameValidator {
+public class XboxLiveUsernameValidator extends BaseUsernameValidator {
 
     /**
      * Fetch the UUID of a player from their Minecraft username.
@@ -15,7 +13,7 @@ public class UsernameValidator extends BaseUsernameValidator {
      * @param username The name of the user to fetch from the API.
      * @return Mojang API user object
      */
-    public static MojangUser getUser(String username, String ...origin) {
+    public static XboxLiveUser getUser(String username, String ...origin) {
         // Make request to Mojang and decode JSON body.
         String json = fetchUserJson(formUrl(username), username, origin);
 
@@ -23,25 +21,10 @@ public class UsernameValidator extends BaseUsernameValidator {
             return null;
         }
 
-        MojangUser result = new Gson().fromJson(json, MojangUser.class);
-        result.id = hyphenateUUID(result.id);
+        XboxLiveUser result = new Gson().fromJson(json, XboxLiveUser.class);
+        result.xuid = hyphenateUUID(result.xuid);
 
         return result;
-    }
-    
-    /**
-     * Create a MojangUser instance from ProxiedPlayer data.
-     * 
-     * @param ProxiedPlayer instance.
-     * @return Mojang API user object.
-     */
-    public static MojangUser getUser(ProxiedPlayer player) {
-    	MojangUser result = new MojangUser();
-    	
-    	result.id = hyphenateUUID(player.getUniqueId().toString());
-    	result.name = player.getName();
-    	
-    	return result;
     }
 
     /**
@@ -52,7 +35,7 @@ public class UsernameValidator extends BaseUsernameValidator {
      */
     private static String formUrl(String username) {
         // caching, load-balancing UUID server.
-        String baseUrl = "https://mcuuid.jcx.ovh/v1/uuid/";
+        String baseUrl = "https://xbl-api.prouser123.me/xuid/";
         return String.format("%s%s", baseUrl, username);
     }
 }
