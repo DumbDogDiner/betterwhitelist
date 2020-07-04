@@ -31,7 +31,7 @@ dependencies {
     implementation group: 'net.md-5', name: 'bungeecord-api', version: '1.15-SNAPSHOT'
 
     // Exclude voice 
-    compile ('net.dv8tion:JDA:4.1.1_105') {
+    compile ('net.dv8tion:JDA:4.2.0_172') {
         exclude module: 'opus-java'
     }
 
