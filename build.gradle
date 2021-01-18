@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'net.md-5', name: 'bungeecord-api', version: '1.16-R0.4-SNAPSHOT'
+    implementation group: 'net.md-5', name: 'bungeecord-api', version: '1.16-R0.5-SNAPSHOT'
 
     // Exclude voice 
     compile ('net.dv8tion:JDA:4.2.0_184') {
