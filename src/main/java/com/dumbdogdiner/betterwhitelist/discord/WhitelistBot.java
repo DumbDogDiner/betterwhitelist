@@ -122,9 +122,7 @@ public class WhitelistBot implements BaseClass {
      */
 
     private void configureMemory(JDABuilder builder) {
-        builder.setDisabledCacheFlags(
-                EnumSet.of(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.EMOTE)
-        );
+        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.EMOTE);
     }
 
     /**
