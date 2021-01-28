@@ -44,7 +44,7 @@ public class WhitelistBot implements BaseClass {
 
     public WhitelistBot() {
     	// constructor
-    	JDABuilder builder = new JDABuilder(AccountType.BOT).setToken(getConfig().getString("discord.token"));
+    	JDABuilder builder = JDABuilder.createDefault(getConfig().getString("discord.token"));
     	
     	configureMemory(builder);
 
