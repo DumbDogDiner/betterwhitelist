@@ -36,7 +36,7 @@ dependencies {
     }
 
     // SQL pools
-    compile ('com.zaxxer:HikariCP:3.4.5')
+    compile ('com.zaxxer:HikariCP:4.0.0')
     
     // JUnit 5 Testing
 	testImplementation('org.junit.jupiter:junit-jupiter:5.7.0')
